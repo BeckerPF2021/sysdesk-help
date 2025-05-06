@@ -9,7 +9,7 @@
 
 # Sysdesk Help
 
-Este projeto é um sistema de **helpdesk** desenvolvido em Laravel com o objetivo de gerenciar chamados técnicos de forma simples e eficiente.
+Este projeto é um sistema de **helpdesk** desenvolvido em Laravel com o objetivo de gerenciar chamados técnicos de forma simples e eficiente. Foi implementada a funcionalidade de **usuários** e **grupos de usuários**, permitindo uma gestão mais estruturada dos acessos e permissões dentro do sistema, facilitando a organização da equipe e a resolução eficiente dos chamados.
 
 ## About Laravel
 
