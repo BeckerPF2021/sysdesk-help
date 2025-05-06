@@ -1,0 +1,26 @@
+Instalar
+
+Composer
+Node
+
+Xampp
+
+no htcdocs
+
+colocar a pasta 
+
+helpdesk-project
+
+composer install
+
+php artisan key:generate
+
+yarn
+
+yarn build
+
+php artisan serve
+
+Link do template 
+
+https://github.com/themeselection/sneat-bootstrap-html-laravel-admin-template-free
