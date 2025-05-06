@@ -9,7 +9,12 @@
 
 # Sysdesk Help
 
-Este projeto é um sistema de **helpdesk** desenvolvido em Laravel com o objetivo de gerenciar chamados técnicos de forma simples e eficiente. Foi implementada a funcionalidade de **usuários** e **grupos de usuários**, permitindo uma gestão mais estruturada dos acessos e permissões dentro do sistema, facilitando a organização da equipe e a resolução eficiente dos chamados.
+Este projeto é um sistema de **helpdesk** desenvolvido em Laravel com o objetivo de gerenciar chamados técnicos de forma simples e eficiente.
+
+## Funcionalidades Implementadas
+
+-   **Gestão de Usuários**: Implementação de um sistema de usuários com autenticação e controle de acesso.
+-   **Gestão de Grupos de Usuários**: Criação de grupos de usuários para gerenciar permissões e restrições específicas.
 
 ## About Laravel
 
