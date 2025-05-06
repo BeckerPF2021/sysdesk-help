@@ -11,6 +11,10 @@
 
 Este projeto é um sistema de **helpdesk** desenvolvido em Laravel com o objetivo de gerenciar chamados técnicos de forma simples e eficiente.
 
+# Implementado Template
+# Implementado Login
+# Implementado Grupo de Uusrios
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax...
