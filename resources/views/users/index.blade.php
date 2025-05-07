@@ -61,7 +61,7 @@
                     <td>{{ $user->userGroup->name ?? '—' }}</td>
                     <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
                     <td class="d-flex">
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning mr-2">Edit</a>
+                        <a href="{{ route('users.edit', $user->id) }}" class="mr-2 btn btn-sm btn-warning">Edit</a>
                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
                             @csrf
                             @method('DELETE')
