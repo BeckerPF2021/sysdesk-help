@@ -48,6 +48,36 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Departments</a>
+                        <div class="dropdown-menu">
+                            <a href="{{ route('departments.index') }}" class="dropdown-item">Departments</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Categories</a>
+                        <div class="dropdown-menu">
+                            <a href="{{ route('categories.index') }}" class="dropdown-item">Categories</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Ticket Statuses</a>
+                        <div class="dropdown-menu">
+                            <a href="{{ route('ticket-statuses.index') }}" class="dropdown-item">Ticket Statuses</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Ticket Priority</a>
+                        <div class="dropdown-menu">
+                            <a href="{{ route('ticket-priorities.index') }}" class="dropdown-item">Ticket Priority</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Ticket</a>
+                        <div class="dropdown-menu">
+                            <a href="{{ route('tickets.index') }}" class="dropdown-item">Ticket</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">{{ Auth::user()->name }}</a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="{{ route('profile.edit') }}" class="dropdown-item">Profile</a>

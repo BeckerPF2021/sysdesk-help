@@ -35,6 +35,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('user-groups.index') }}">User Groups</a>
+                                <a class="dropdown-item" href="{{ route('user-groups.create') }}">Criar Grupo de Usuário</a>
                                 <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
                             </div>
                         </li>
