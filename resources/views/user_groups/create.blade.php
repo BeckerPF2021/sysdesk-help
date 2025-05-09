@@ -3,56 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create User Group</title>
+    <title>Criar Grupo de Usuário</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-    </style>
 </head>
 <body>
 
-    <!-- Navbar padrão Laravel -->
+    <!-- Navbar -->
     <nav class="bg-white shadow-sm navbar navbar-expand-lg navbar-light border-bottom">
         <div class="container">
             <a class="navbar-brand" href="{{ route('dashboard') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
-
-            <div class="collapse navbar-collapse">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="ml-auto navbar-nav">
                     @auth
-                        <li class="nav-item">
-                            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('user-groups.index') }}" class="nav-link">User Groups</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('user-groups.create') }}" class="nav-link active">Create Group</a>
+                        <li class="nav-item"><a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">Gerenciar</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ route('user-groups.index') }}">User Groups</a>
+                                <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
+                            </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">
                                 {{ Auth::user()->name }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">Perfil</a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button class="dropdown-item" type="submit">Logout</button>
+                                    <button type="submit" class="dropdown-item">Logout</button>
                                 </form>
                             </div>
                         </li>
                     @endauth
-
                     @guest
-                        <li class="nav-item">
-                            <a href="{{ route('login') }}" class="nav-link">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('register') }}" class="nav-link">Register</a>
-                        </li>
+                        <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
+                        <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Register</a></li>
                     @endguest
                 </ul>
             </div>
@@ -61,9 +52,8 @@
 
     <!-- Conteúdo -->
     <div class="container mt-4">
-        <h1>Create User Group</h1>
+        <h1 class="mb-4">Criar Grupo de Usuário</h1>
 
-        {{-- Exibe erros de validação --}}
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
@@ -74,27 +64,23 @@
             </div>
         @endif
 
-        {{-- Formulário --}}
-        <form action="{{ route('user-groups.store') }}" method="POST">
+        <form method="POST" action="{{ route('user-groups.store') }}">
             @csrf
-
             <div class="form-group">
-                <label for="name">Group Name</label>
+                <label for="name">Nome do Grupo</label>
                 <input type="text" name="name" class="form-control" required value="{{ old('name') }}">
             </div>
-
             <div class="form-group">
-                <label for="description">Description (optional)</label>
-                <textarea name="description" class="form-control" rows="3">{{ old('description') }}</textarea>
+                <label for="description">Descrição</label>
+                <textarea name="description" class="form-control">{{ old('description') }}</textarea>
             </div>
-
-            <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('user-groups.index') }}" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-primary">Criar</button>
+            <a href="{{ route('user-groups.index') }}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>
 
-    <!-- Scripts do Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
