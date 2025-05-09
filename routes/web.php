@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TicketStatusController;
 use App\Http\Controllers\TicketPriorityController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TicketInteractionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,31 +23,31 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 // Rotas autenticadas
 Route::middleware('auth')->group(function () {
+
     // Perfil do usuário
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // CRUD de Grupos de Usuários
+    // CRUDs
     Route::resource('user-groups', UserGroupController::class);
-
-    // CRUD de Usuários
     Route::resource('users', UserController::class)->except(['show']);
-
-    // CRUD de Departamentos
     Route::resource('departments', DepartmentController::class);
-
-    // CRUD de Categorias
     Route::resource('categories', CategoryController::class);
-
-    // CRUD de Status de Tickets
     Route::resource('ticket-statuses', TicketStatusController::class);
-
-    // CRUD de Prioridades de Tickets
     Route::resource('ticket-priorities', TicketPriorityController::class);
+    Route::resource('tickets', TicketController::class); // Inclui 'show' também
 
-    // CRUD do Ticket
-    Route::resource('tickets', TicketController::class);
+    // Rotas de Interações por Ticket
+    Route::prefix('tickets/{ticket}')->name('ticket_interactions.')->group(function () {
+        Route::get('interactions', [TicketInteractionController::class, 'index'])->name('index');
+        Route::get('interactions/create', [TicketInteractionController::class, 'create'])->name('create');
+        Route::post('interactions', [TicketInteractionController::class, 'store'])->name('store');
+        Route::get('interactions/{ticketInteraction}/edit', [TicketInteractionController::class, 'edit'])->name('edit');
+        Route::put('interactions/{ticketInteraction}', [TicketInteractionController::class, 'update'])->name('update');
+        Route::delete('interactions/{ticketInteraction}', [TicketInteractionController::class, 'destroy'])->name('destroy');
+    });
+
 });
 
 require __DIR__.'/auth.php';

@@ -3,32 +3,48 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Cria a tabela 'ticket_interactions' para armazenar interações de tickets.
      */
     public function up(): void
     {
         Schema::create('ticket_interactions', function (Blueprint $table) {
             $table->id();
-            $table->text('text'); // Comentário da interação
-            $table->dateTime('comment_date')->default(DB::raw('CURRENT_TIMESTAMP')); // Data da interação
-            $table->unsignedBigInteger('interaction_type'); // Tipo da interação (possível referência a outra tabela)
-            $table->string('file_type', 100)->nullable(); // Tipo de arquivo (se houver)
-            $table->bigInteger('file_size')->nullable(); // Tamanho do arquivo (se houver)
-            
-            // Chaves estrangeiras
-            $table->foreignId('fk_user_id')->constrained('users')->onDelete('restrict'); // Usuário que interage
-            $table->foreignId('fk_ticket_id')->constrained('tickets')->onDelete('restrict'); // Ticket relacionado
 
-            $table->timestamps(); // created_at e updated_at
+            $table->text('text'); // Texto da interação
+            $table->dateTime('comment_date')->default(DB::raw('CURRENT_TIMESTAMP')); // Data da interação
+
+            // Relação com interaction_types
+            $table->foreignId('interaction_type')
+                  ->constrained('interaction_types')
+                  ->onDelete('restrict');
+
+            $table->string('file_type', 100)->nullable(); // Tipo de arquivo
+            $table->unsignedBigInteger('file_size')->nullable(); // Tamanho do arquivo
+
+            // Relação com users
+            $table->foreignId('user_id')
+                  ->constrained('users')
+                  ->onDelete('restrict');
+
+            // Relação com tickets
+            $table->foreignId('ticket_id')
+                  ->constrained('tickets')
+                  ->onDelete('restrict');
+
+            $table->timestamps();
+
+            // Índices para otimização de busca
+            $table->index(['user_id', 'ticket_id', 'interaction_type']);
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Remove a tabela 'ticket_interactions'.
      */
     public function down(): void
     {

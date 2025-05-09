@@ -12,36 +12,46 @@ class Ticket extends Model
     protected $fillable = [
         'title',
         'description',
-        'fk_User_id',
-        'fk_Category_id',
-        'fk_TicketPriority_id',
-        'fk_TicketStatus_id',
-        'fk_Department_id'
+        'fk_user_id', // Corrigido para 'fk_user_id'
+        'fk_category_id', // Corrigido para 'fk_category_id'
+        'fk_ticket_priority_id', // Corrigido para 'fk_ticket_priority_id'
+        'fk_ticket_status_id', // Corrigido para 'fk_ticket_status_id'
+        'fk_department_id' // Corrigido para 'fk_department_id'
     ];
 
-    // Definir as relações
+    // Relacionamento com o usuário
     public function user()
     {
-        return $this->belongsTo(User::class, 'fk_User_id');
+        return $this->belongsTo(User::class, 'fk_user_id'); // Usando 'fk_user_id' corretamente
     }
 
+    // Relacionamento com a categoria
     public function category()
     {
-        return $this->belongsTo(Category::class, 'fk_Category_id');
+        return $this->belongsTo(Category::class, 'fk_category_id'); // Usando 'fk_category_id' corretamente
     }
 
+    // Relacionamento com o tipo de prioridade do ticket
     public function ticketPriority()
     {
-        return $this->belongsTo(TicketPriority::class, 'fk_TicketPriority_id');
+        return $this->belongsTo(TicketPriority::class, 'fk_ticket_priority_id'); // Usando 'fk_ticket_priority_id' corretamente
     }
 
+    // Relacionamento com o status do ticket
     public function ticketStatus()
     {
-        return $this->belongsTo(TicketStatus::class, 'fk_TicketStatus_id');
+        return $this->belongsTo(TicketStatus::class, 'fk_ticket_status_id'); // Usando 'fk_ticket_status_id' corretamente
     }
 
+    // Relacionamento com o departamento
     public function department()
     {
-        return $this->belongsTo(Department::class, 'fk_Department_id');
+        return $this->belongsTo(Department::class, 'fk_department_id'); // Usando 'fk_department_id' corretamente
+    }
+
+    // Relacionamento com as interações do ticket
+    public function interactions()
+    {
+        return $this->hasMany(TicketInteraction::class, 'fk_ticket_id'); // Usando 'fk_ticket_id' corretamente
     }
 }

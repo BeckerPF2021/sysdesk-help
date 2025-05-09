@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('ticket_statuses', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name', 100)->unique();
+            $table->timestamps(); // created_at e updated_at
         });
     }
 

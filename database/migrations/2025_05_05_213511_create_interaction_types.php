@@ -9,13 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      *
-     * Cria a tabela 'ticket_statuses' com nome único.
+     * Cria a tabela 'interaction_types' com nome único.
      */
     public function up(): void
     {
-        Schema::create('ticket_statuses', function (Blueprint $table) {
+        Schema::create('interaction_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique(); // Nome do status (ex: Aberto, Fechado, Em andamento)
+            $table->string('name', 100)->unique(); // Exemplo: Comentário, Atualização de Status, Anexo
             $table->timestamps(); // Campos created_at e updated_at
         });
     }
@@ -23,10 +23,10 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      *
-     * Remove a tabela 'ticket_statuses' do banco de dados.
+     * Remove a tabela 'interaction_types' do banco de dados.
      */
     public function down(): void
     {
-        Schema::dropIfExists('ticket_statuses');
+        Schema::dropIfExists('interaction_types');
     }
 };
