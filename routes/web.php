@@ -40,12 +40,13 @@ Route::middleware('auth')->group(function () {
 
     // Rotas de Interações por Ticket
     Route::prefix('tickets/{ticket}')->name('ticket_interactions.')->group(function () {
-        Route::get('interactions', [TicketInteractionController::class, 'index'])->name('index');
-        Route::get('interactions/create', [TicketInteractionController::class, 'create'])->name('create');
-        Route::post('interactions', [TicketInteractionController::class, 'store'])->name('store');
-        Route::get('interactions/{ticketInteraction}/edit', [TicketInteractionController::class, 'edit'])->name('edit');
-        Route::put('interactions/{ticketInteraction}', [TicketInteractionController::class, 'update'])->name('update');
-        Route::delete('interactions/{ticketInteraction}', [TicketInteractionController::class, 'destroy'])->name('destroy');
+        Route::get('interactions', [TicketInteractionController::class, 'index'])->name('index'); // Listar interações do ticket
+        Route::get('interactions/create', [TicketInteractionController::class, 'create'])->name('create'); // Formulário de criação de interação
+        Route::post('interactions', [TicketInteractionController::class, 'store'])->name('store'); // Armazenar interação
+        Route::get('interactions/{ticketInteraction}', [TicketInteractionController::class, 'show'])->name('show'); // Mostrar interação
+        Route::get('interactions/{ticketInteraction}/edit', [TicketInteractionController::class, 'edit'])->name('edit'); // Editar interação
+        Route::put('interactions/{ticketInteraction}', [TicketInteractionController::class, 'update'])->name('update'); // Atualizar interação
+        Route::delete('interactions/{ticketInteraction}', [TicketInteractionController::class, 'destroy'])->name('destroy'); // Deletar interação
     });
 
 });

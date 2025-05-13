@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\TicketPriority;
 use App\Models\TicketStatus;
 use App\Models\Department;
-use App\Models\TicketInteraction; // Certifique-se de importar o modelo de interações
+use App\Models\TicketInteraction;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -115,7 +115,7 @@ class TicketController extends Controller
     // Exibe os detalhes de um ticket, incluindo as interações
     public function show($id)
     {
-        // Obtém o ticket com as interações relacionadas
+        // Obtém o ticket com as interações e os usuários relacionados
         $ticket = Ticket::with(['interactions.user'])->findOrFail($id);
 
         // Retorna a view de exibição do ticket com as interações

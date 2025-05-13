@@ -11,7 +11,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('userGroup')->get();
+        // Alterando para usar paginate() em vez de get()
+        $users = User::with('userGroup')->paginate(10); // Aqui, 10 é o número de usuários por página
         return view('users.index', compact('users'));
     }
 

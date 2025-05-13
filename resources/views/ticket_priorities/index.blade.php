@@ -1,67 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Prioridades de Tickets</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
+@section('title', 'Lista de Prioridades')
 
-<body>
+@section('content')
+<div class="container mt-4">
+    <h1 class="mb-4">Lista de Prioridades</h1>
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm navbar navbar-expand-lg navbar-light border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
+    <!-- Exibição de mensagens de sucesso -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-    </nav>
+    @endif
 
-    <!-- Conteúdo -->
-    <div class="container mt-4">
-        <h1 class="mb-4">Lista de Prioridades de Tickets</h1>
+    <a href="{{ route('ticket-priorities.create') }}" class="mb-4 btn btn-primary">Criar Nova Prioridade</a>
 
-        <!-- Mensagem de sucesso -->
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <a href="{{ route('ticket-priorities.create') }}" class="mb-4 btn btn-primary">Criar Nova Prioridade</a>
-
-        <table class="table table-bordered">
-            <thead>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($ticketPriorities as $priority)
                 <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Ações</th>
+                    <td>{{ $priority->id }}</td>
+                    <td>{{ $priority->name }}</td>
+                    <td>
+                        <a href="{{ route('ticket-priorities.edit', $priority->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ route('ticket-priorities.destroy', $priority->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta prioridade?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                        </form>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach ($ticketPriorities as $priority)
-                    <tr>
-                        <td>{{ $priority->id }}</td>
-                        <td>{{ $priority->name }}</td>
-                        <td>
-                            <a href="{{ route('ticket-priorities.edit', $priority->id) }}" class="btn btn-warning">Editar</a>
-
-                            <form action="{{ route('ticket-priorities.destroy', $priority->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+            @empty
+                <tr>
+                    <td colspan="3" class="text-center">Nenhuma prioridade encontrada.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+@endsection
