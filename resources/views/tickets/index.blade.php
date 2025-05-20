@@ -35,6 +35,7 @@
                 <th>Status</th>
                 <th>Prioridade</th>
                 <th>Departamento</th>
+                <th>Responsável</th> {{-- Nova coluna --}}
                 <th>Ações</th>
             </tr>
         </thead>
@@ -52,6 +53,9 @@
                     <td>{{ $ticket->ticketPriority->name }}</td>
                     <td>{{ $ticket->department->name }}</td>
                     <td>
+                        {{ $ticket->responsibleUser ? $ticket->responsibleUser->name : '-' }}
+                    </td>
+                    <td>
                         <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-warning btn-sm">Editar</a>
                         <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este ticket?');">
                             @csrf
@@ -62,7 +66,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="text-center">Nenhum ticket encontrado.</td>
+                    <td colspan="8" class="text-center">Nenhum ticket encontrado.</td>
                 </tr>
             @endforelse
         </tbody>

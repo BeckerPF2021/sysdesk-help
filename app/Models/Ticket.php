@@ -12,46 +12,53 @@ class Ticket extends Model
     protected $fillable = [
         'title',
         'description',
-        'fk_user_id', // Corrigido para 'fk_user_id'
-        'fk_category_id', // Corrigido para 'fk_category_id'
-        'fk_ticket_priority_id', // Corrigido para 'fk_ticket_priority_id'
-        'fk_ticket_status_id', // Corrigido para 'fk_ticket_status_id'
-        'fk_department_id' // Corrigido para 'fk_department_id'
+        'fk_user_id',              // usuário que abriu o chamado
+        'fk_responsible_user_id',  // usuário responsável pelo chamado (novo)
+        'fk_category_id',
+        'fk_ticket_priority_id',
+        'fk_ticket_status_id',
+        'fk_department_id'
     ];
 
-    // Relacionamento com o usuário
+    // Usuário que abriu o chamado
     public function user()
     {
-        return $this->belongsTo(User::class, 'fk_user_id'); // Usando 'fk_user_id' corretamente
+        return $this->belongsTo(User::class, 'fk_user_id');
     }
 
-    // Relacionamento com a categoria
+    // Usuário responsável pelo chamado
+    public function responsibleUser()
+    {
+        return $this->belongsTo(User::class, 'fk_responsible_user_id');
+    }
+
+    // Categoria do chamado
     public function category()
     {
-        return $this->belongsTo(Category::class, 'fk_category_id'); // Usando 'fk_category_id' corretamente
+        return $this->belongsTo(Category::class, 'fk_category_id');
     }
 
-    // Relacionamento com o tipo de prioridade do ticket
+    // Prioridade do chamado
     public function ticketPriority()
     {
-        return $this->belongsTo(TicketPriority::class, 'fk_ticket_priority_id'); // Usando 'fk_ticket_priority_id' corretamente
+        return $this->belongsTo(TicketPriority::class, 'fk_ticket_priority_id');
     }
 
-    // Relacionamento com o status do ticket
+    // Status do chamado
     public function ticketStatus()
     {
-        return $this->belongsTo(TicketStatus::class, 'fk_ticket_status_id'); // Usando 'fk_ticket_status_id' corretamente
+        return $this->belongsTo(TicketStatus::class, 'fk_ticket_status_id');
     }
 
-    // Relacionamento com o departamento
+    // Departamento responsável
     public function department()
     {
-        return $this->belongsTo(Department::class, 'fk_department_id'); // Usando 'fk_department_id' corretamente
+        return $this->belongsTo(Department::class, 'fk_department_id');
     }
 
-    // Relacionamento com as interações do ticket
+    // Interações do ticket
     public function interactions()
     {
-        return $this->hasMany(TicketInteraction::class, 'fk_ticket_id'); // Usando 'fk_ticket_id' corretamente
+        return $this->hasMany(TicketInteraction::class, 'fk_ticket_id');
     }
 }

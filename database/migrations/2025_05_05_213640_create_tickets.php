@@ -24,6 +24,11 @@ return new class extends Migration
                   ->constrained('users')
                   ->onDelete('cascade');
 
+            $table->foreignId('fk_responsible_user_id') // Usuário responsável pelo chamado
+                  ->nullable()
+                  ->constrained('users')
+                  ->onDelete('set null');
+
             $table->foreignId('fk_category_id')         // Categoria do chamado
                   ->constrained('categories')
                   ->onDelete('restrict');
