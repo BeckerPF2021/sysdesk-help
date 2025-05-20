@@ -28,6 +28,11 @@
 - ✅ Template base responsivo com Bootstrap
 - ✅ Autenticação de login
 - ✅ Grupo de usuários (controle de acesso)
+- ✅ Criação e gerenciamento de **Departamentos**
+- ✅ Criação e gerenciamento de **Categorias** de tickets
+- ✅ Definição de **Status** de tickets
+- ✅ Criação e gerenciamento de **Prioridades** de tickets
+- ✅ Sistema de **Tickets**, com criação, atribuição e acompanhamento
 
 ## Captura de Tela
 
