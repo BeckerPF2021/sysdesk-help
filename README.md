@@ -33,6 +33,7 @@
 - ✅ Definição de **Status** de tickets
 - ✅ Criação e gerenciamento de **Prioridades** de tickets
 - ✅ Sistema de **Tickets**, com criação, atribuição e acompanhamento
+- ✅ Sistema de **Notificação por email**, com criação, atribuição e acompanhamento do ticket
 
 ## Captura de Tela
 

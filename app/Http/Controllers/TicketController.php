@@ -8,15 +8,13 @@ use App\Models\Category;
 use App\Models\TicketPriority;
 use App\Models\TicketStatus;
 use App\Models\Department;
-use App\Models\TicketInteraction;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TicketCreatedMail;
+use App\Mail\TicketUpdatedMail;
 
 class TicketController extends Controller
 {
-    // Exibe a lista de tickets com suas relações
     public function index()
     {
         $tickets = Ticket::with([
@@ -31,7 +29,6 @@ class TicketController extends Controller
         return view('tickets.index', compact('tickets'));
     }
 
-    // Exibe o formulário para criar um novo ticket
     public function create()
     {
         $users = User::all();
@@ -49,7 +46,6 @@ class TicketController extends Controller
         ));
     }
 
-    // Armazena o novo ticket e envia email ao responsável
     public function store(Request $request)
     {
         $request->validate([
@@ -85,7 +81,6 @@ class TicketController extends Controller
         return redirect()->route('tickets.index')->with('success', 'Ticket criado com sucesso e e-mail enviado ao responsável!');
     }
 
-    // Exibe o formulário para editar um ticket existente
     public function edit($id)
     {
         $ticket = Ticket::findOrFail($id);
@@ -107,7 +102,6 @@ class TicketController extends Controller
         ));
     }
 
-    // Atualiza o ticket existente e envia email se responsável mudou
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -123,7 +117,9 @@ class TicketController extends Controller
 
         $ticket = Ticket::findOrFail($id);
 
-        $responsibleChanged = $ticket->fk_responsible_user_id != $request->fk_responsible_user_id;
+        $oldStatus = $ticket->fk_ticket_status_id;
+        $oldPriority = $ticket->fk_ticket_priority_id;
+        $oldResponsible = $ticket->fk_responsible_user_id;
 
         $ticket->update([
             'title' => $request->title,
@@ -137,17 +133,33 @@ class TicketController extends Controller
         ]);
 
         // Se o responsável mudou, enviar email para o novo responsável
-        if ($responsibleChanged && $ticket->fk_responsible_user_id) {
-            $responsibleUser = User::find($ticket->fk_responsible_user_id);
-            if ($responsibleUser && $responsibleUser->email) {
-                Mail::to($responsibleUser->email)->send(new TicketCreatedMail($ticket));
+        if ($oldResponsible != $ticket->fk_responsible_user_id && $ticket->fk_responsible_user_id) {
+            $newResponsible = User::find($ticket->fk_responsible_user_id);
+            if ($newResponsible && $newResponsible->email) {
+                Mail::to($newResponsible->email)->send(new TicketCreatedMail($ticket));
+            }
+        }
+
+        // Se o status ou prioridade mudou, enviar email para responsável e usuário criador
+        if ($oldStatus != $ticket->fk_ticket_status_id || $oldPriority != $ticket->fk_ticket_priority_id) {
+            $emailsToNotify = [];
+
+            if ($ticket->responsibleUser && $ticket->responsibleUser->email) {
+                $emailsToNotify[] = $ticket->responsibleUser->email;
+            }
+
+            if ($ticket->user && $ticket->user->email && !in_array($ticket->user->email, $emailsToNotify)) {
+                $emailsToNotify[] = $ticket->user->email;
+            }
+
+            foreach ($emailsToNotify as $email) {
+                Mail::to($email)->send(new TicketUpdatedMail($ticket, $oldStatus, $oldPriority));
             }
         }
 
         return redirect()->route('tickets.index')->with('success', 'Ticket atualizado com sucesso!');
     }
 
-    // Exclui um ticket
     public function destroy($id)
     {
         Ticket::destroy($id);
@@ -155,12 +167,12 @@ class TicketController extends Controller
         return redirect()->route('tickets.index')->with('success', 'Ticket excluído com sucesso!');
     }
 
-    // Exibe os detalhes de um ticket, incluindo as interações
     public function show($id)
     {
         $ticket = Ticket::with([
             'interactions.user',
             'responsibleUser',
+            'user',
         ])->findOrFail($id);
 
         return view('tickets.show', compact('ticket'));
