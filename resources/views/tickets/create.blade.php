@@ -40,6 +40,19 @@
             </select>
         </div>
 
+        <!-- Campo Responsável -->
+        <div class="form-group">
+            <label for="fk_responsible_user_id">Responsável</label>
+            <select id="fk_responsible_user_id" name="fk_responsible_user_id" class="form-control">
+                <option value="">-- Selecione um responsável (opcional) --</option>
+                @foreach ($users as $user)
+                    <option value="{{ $user->id }}" {{ old('fk_responsible_user_id') == $user->id ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="form-group">
             <label for="fk_category_id">Categoria</label>
             <select id="fk_category_id" name="fk_category_id" class="form-control" required>
@@ -73,7 +86,6 @@
             </select>
         </div>
 
-        <!-- Adicionando o campo para Prioridade -->
         <div class="form-group">
             <label for="fk_ticket_priority_id">Prioridade</label>
             <select id="fk_ticket_priority_id" name="fk_ticket_priority_id" class="form-control" required>

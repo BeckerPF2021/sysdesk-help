@@ -32,10 +32,11 @@
                 <th>ID</th>
                 <th>Título</th>
                 <th>Descrição</th>
+                <th>Aberto por</th> {{-- Novo campo --}}
                 <th>Status</th>
                 <th>Prioridade</th>
                 <th>Departamento</th>
-                <th>Responsável</th> {{-- Nova coluna --}}
+                <th>Responsável</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -49,12 +50,11 @@
                         </a>
                     </td>
                     <td>{{ $ticket->description }}</td>
+                                        <td>{{ $ticket->user ? $ticket->user->name : '-' }}</td> {{-- Criador --}}
                     <td>{{ $ticket->ticketStatus->name }}</td>
                     <td>{{ $ticket->ticketPriority->name }}</td>
                     <td>{{ $ticket->department->name }}</td>
-                    <td>
-                        {{ $ticket->responsibleUser ? $ticket->responsibleUser->name : '-' }}
-                    </td>
+                    <td>{{ $ticket->responsibleUser ? $ticket->responsibleUser->name : '-' }}</td>
                     <td>
                         <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-warning btn-sm">Editar</a>
                         <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este ticket?');">
@@ -66,7 +66,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8" class="text-center">Nenhum ticket encontrado.</td>
+                    <td colspan="9" class="text-center">Nenhum ticket encontrado.</td>
                 </tr>
             @endforelse
         </tbody>
