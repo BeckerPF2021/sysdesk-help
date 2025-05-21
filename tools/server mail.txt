@@ -1,0 +1,16 @@
+esse email vai ser utilizado para fazer os disparos dos emails
+email: sysdeskhelp@gmail.com
+pass: @Bigevil2003
+
+
+código applaravel 
+nnjxnbqvuvzxuivr
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=sysdeskhelp@gmail.com
+MAIL_PASSWORD=nnjxnbqvuvzxuivr
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=sysdeskhelp@gmail.com
+MAIL_FROM_NAME="SysDesk Help"
