@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>@yield('title', config('app.name'))</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -15,242 +15,321 @@
       background-color: #f4f6f9;
       overflow-y: auto;
     }
+
+    /* Sidebar minimizada por padrão */
     .sidebar {
-      width: 250px;
+      width: 60px; /* largura minimizada só ícones */
       background-color: rgba(52, 58, 64, 0.9);
       color: white;
       position: fixed;
       top: 0;
       left: 0;
       bottom: 0;
-      padding-top: 30px;
-      transition: all 0.3s ease;
+      padding-top: 10px;
+      transition: width 0.3s ease;
       overflow-y: auto;
-      padding-left: 20px;
       z-index: 1000;
+      white-space: nowrap;
     }
-    .sidebar h4 {
-      text-align: center;
-      color: #fff;
-      font-size: 1.125rem;
-      margin-bottom: 20px;
+    /* Expande a sidebar quando o mouse está sobre ela */
+    .sidebar:hover {
+      width: 250px;
     }
-    .sidebar .user-name {
-      color: #fff;
-      font-size: 0.9rem;
-      margin-bottom: 20px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+
+    /* Esconder tudo que não for ícone quando minimizada */
+    .sidebar:not(:hover) .user-name,
+    .sidebar:not(:hover) h4,
+    .sidebar:not(:hover) .menu-item > a span:not(.icon-only),
+    .sidebar:not(:hover) a span:not(.icon-only),
+    .sidebar:not(:hover) .submenu,
+    .sidebar:not(:hover) form button span {
+      display: none !important;
     }
-    .sidebar .user-name img {
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-      object-fit: cover;
-    }
+
+    /* Mostrar os ícones sempre */
     .sidebar a,
     .sidebar .menu-item > a {
       color: white;
       text-decoration: none;
-      padding: 12px 20px;
+      padding: 12px 10px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       transition: background-color 0.3s ease;
       font-size: 0.95rem;
-      width: 100%;
       cursor: pointer;
+      position: relative;
     }
-    .sidebar a:hover {
+    .sidebar a:hover,
+    .sidebar .menu-item > a:hover {
       background-color: #495057;
     }
-    .sidebar .menu-item > a span {
-      display: flex;
-      align-items: center;
-    }
+
+    /* Ícones centralizados e com largura fixa */
     .sidebar i.fas {
-      margin-right: 10px;
-      width: 20px;
+      margin-right: 0;
+      width: 40px;
       text-align: center;
       transition: transform 0.3s ease;
+      flex-shrink: 0;
+      font-size: 1.3rem;
     }
+    /* Ícone para espaço no texto, oculto quando minimizado */
+    .sidebar span.icon-only {
+      margin-left: 10px;
+    }
+    /* Ícone chevron para abrir submenu, escondido minimizado */
+    .sidebar:not(:hover) .menu-item > a i.fas.fa-chevron-down {
+      display: none;
+    }
+    .sidebar:hover .menu-item > a i.fas.fa-chevron-down {
+      margin-left: auto;
+      margin-right: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    /* Rotacionar ícone quando submenu aberto */
+    .rotated {
+      transform: rotate(180deg);
+    }
+
+    /* Submenu */
     .submenu {
       display: none;
       flex-direction: column;
-      padding-left: 20px;
+      padding-left: 10px;
+      margin-left: 40px;
+    }
+    .sidebar:hover .submenu.show {
+      display: flex;
     }
     .submenu a {
-      font-size: 0.95rem;
-      padding: 8px 20px;
+      font-size: 0.9rem;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       color: #dee2e6;
       transition: background-color 0.2s ease;
       cursor: pointer;
+      white-space: nowrap;
     }
     .submenu a i {
       margin-right: 10px;
       width: 20px;
       text-align: center;
     }
-    .submenu a span {
-      display: flex;
-      align-items: center;
-    }
     .submenu a:hover {
       background-color: #495057;
       color: white;
     }
-    .rotated {
-      transform: rotate(180deg);
+
+    /* Header user e título escondidos quando minimizada */
+    .user-name {
+      color: #fff;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 10px;
     }
+    .user-name img {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    h4 {
+      color: #fff;
+      font-size: 1.125rem;
+      margin-bottom: 15px;
+      padding-left: 10px;
+    }
+
+    /* Conteúdo principal com margem dinâmica */
     .content {
-      margin-left: 250px;
+      margin-left: 60px;
       flex: 1;
       padding: 20px;
       transition: margin-left 0.3s ease;
       overflow-y: auto;
       padding-top: 50px;
     }
+    /* Expande margem quando sidebar hover */
+    .sidebar:hover ~ .content {
+      margin-left: 250px;
+    }
+
+    /* Botão toggle sidebar escondido (não usado aqui) */
     #toggleSidebar {
       display: none;
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 1100;
-      background-color: #343a40;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 20px;
-      cursor: pointer;
     }
+
+    /* Responsivo */
     @media (max-width: 768px) {
       .sidebar {
-        position: fixed;
-        width: 250px;
-        height: 100%;
-        top: 0;
-        left: -250px;
-        z-index: 1000;
-        transition: left 0.3s ease;
+        left: -250px !important;
+        width: 250px !important;
+        transition: left 0.3s ease !important;
+      }
+      .sidebar:hover {
+        width: 250px !important;
       }
       .sidebar.active {
-        left: 0;
+        left: 0 !important;
       }
       .content {
-        margin-left: 0;
+        margin-left: 0 !important;
         padding-top: 70px;
       }
       #toggleSidebar {
         display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1100;
+        background-color: #343a40;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .sidebar:hover ~ .content {
+        margin-left: 0 !important;
       }
     }
   </style>
 </head>
 <body>
 
-<button id="toggleSidebar"><i class="fas fa-bars"></i></button>
+<button id="toggleSidebar" aria-label="Toggle sidebar menu"><i class="fas fa-bars"></i></button>
 
-<!-- Barra Lateral -->
-<div class="sidebar" id="sidebar">
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar menu" tabindex="0">
   @auth
   <div class="user-name">
-    <img src="{{ Auth::user()->profile_picture_url ?? 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(Auth::user()->email))) . '?d=mp&s=40' }}" alt="User Photo">
-    <span>{{ Auth::user()->name }}</span>
+    <img src="{{ Auth::user()->profile_picture_url ?? 'https://www.gravatar.com/avatar/' . md5(strtolower(trim(Auth::user()->email))) . '?d=mp&s=40' }}" alt="Foto do usuário">
+    <span class="user-text"> {{ Auth::user()->name }} </span>
   </div>
   @endauth
 
-  <h4>Meu Sistema</h4>
+  <h4>SysDesk</h4>
+
   <div class="d-flex flex-column">
     <div class="menu-item">
-      <a href="javascript:void(0);">
-        <span><i class="fas fa-tachometer-alt"></i> Dashboard</span>
+      <a href="javascript:void(0);" aria-expanded="false" aria-controls="submenu-dashboard" role="button" tabindex="0">
+        <i class="fas fa-tachometer-alt"></i>
+        <span class="icon-only">Dashboard</span>
         <i class="fas fa-chevron-down"></i>
       </a>
-      <div class="submenu">
-        <a href="{{ route('dashboard') }}"><span><i class="fas fa-home"></i> Início</span></a>
-        <a href="#"><span><i class="fas fa-chart-line"></i> Resumo</span></a>
+      <div class="submenu" id="submenu-dashboard" aria-hidden="true">
+        <a href="{{ route('dashboard') }}"><i class="fas fa-home"></i> <span>Início</span></a>
+        <a href="#"><i class="fas fa-chart-line"></i> <span>Resumo</span></a>
       </div>
     </div>
 
     <div class="menu-item">
-      <a href="javascript:void(0);">
-        <span><i class="fas fa-users"></i> Usuários</span>
+      <a href="javascript:void(0);" aria-expanded="false" aria-controls="submenu-users" role="button" tabindex="0">
+        <i class="fas fa-users"></i>
+        <span class="icon-only">Usuários</span>
         <i class="fas fa-chevron-down"></i>
       </a>
-      <div class="submenu">
-        <a href="{{ route('users.index') }}"><span><i class="fas fa-list"></i> Listar</span></a>
-        <a href="{{ route('users.create') }}"><span><i class="fas fa-user-plus"></i> Cadastrar</span></a>
+      <div class="submenu" id="submenu-users" aria-hidden="true">
+        <a href="{{ route('users.index') }}"><i class="fas fa-list"></i> <span>Listar</span></a>
+        <a href="{{ route('users.create') }}"><i class="fas fa-user-plus"></i> <span>Cadastrar</span></a>
       </div>
     </div>
 
     <a href="{{ route('user-groups.index') }}">
-      <span><i class="fas fa-users-cog"></i> Grupos de Usuários</span>
+      <i class="fas fa-users-cog"></i>
+      <span class="icon-only">Grupos</span>
     </a>
 
     <a href="{{ route('departments.index') }}">
-      <span><i class="fas fa-building"></i> Departamentos</span>
+      <i class="fas fa-building"></i>
+      <span class="icon-only">Departamentos</span>
     </a>
 
     <div class="menu-item">
-      <a href="javascript:void(0);">
-        <span><i class="fas fa-ticket-alt"></i> Chamados</span>
+      <a href="javascript:void(0);" aria-expanded="false" aria-controls="submenu-tickets" role="button" tabindex="0">
+        <i class="fas fa-ticket-alt"></i>
+        <span class="icon-only">Chamados</span>
         <i class="fas fa-chevron-down"></i>
       </a>
-      <div class="submenu">
-        <a href="{{ route('tickets.index') }}"><span><i class="fas fa-list-alt"></i> Listar</span></a>
-        <a href="{{ route('tickets.create') }}"><span><i class="fas fa-plus"></i> Cadastrar</span></a>
-        <a href="{{ route('ticket-statuses.index') }}"><span><i class="fas fa-toggle-on"></i> Status</span></a>
-        <a href="{{ route('ticket-priorities.index') }}"><span><i class="fas fa-exclamation-circle"></i> Prioridades</span></a>
-        <a href="{{ route('categories.index') }}"><span><i class="fas fa-tags"></i> Categorias</span></a>
+      <div class="submenu" id="submenu-tickets" aria-hidden="true">
+        <a href="{{ route('tickets.index') }}"><i class="fas fa-list-alt"></i> <span>Listar</span></a>
+        <a href="{{ route('tickets.create') }}"><i class="fas fa-plus"></i> <span>Cadastrar</span></a>
+        <a href="{{ route('ticket-statuses.index') }}"><i class="fas fa-toggle-on"></i> <span>Status</span></a>
+        <a href="{{ route('ticket-priorities.index') }}"><i class="fas fa-exclamation-circle"></i> <span>Prioridades</span></a>
+        <a href="{{ route('categories.index') }}"><i class="fas fa-tags"></i> <span>Categorias</span></a>
       </div>
     </div>
 
-    <!-- Aqui alterei para chamar o index do perfil -->
+    <div class="menu-item">
+      <a href="javascript:void(0);" aria-expanded="false" aria-controls="submenu-reports" role="button" tabindex="0">
+        <i class="fas fa-chart-pie"></i>
+        <span class="icon-only">Relatórios</span>
+        <i class="fas fa-chevron-down"></i>
+      </a>
+      <div class="submenu" id="submenu-reports" aria-hidden="true">
+        <a href="{{ route('reports.index') }}"><i class="fas fa-file-alt"></i> <span>Relatório de Chamados</span></a>
+      </div>
+    </div>
+
     <a href="{{ route('profile.index') }}">
-      <span><i class="fas fa-user-circle"></i> Perfil</span>
+      <i class="fas fa-user-circle"></i>
+      <span class="icon-only">Perfil</span>
     </a>
 
     <form action="{{ route('logout') }}" method="POST" class="p-0">
       @csrf
-      <button type="submit" class="text-white btn btn-link" style="background-color: transparent; border: none;">
-        <i class="fas fa-sign-out-alt"></i> Sair
+      <button type="submit" class="text-white btn btn-link" style="background-color: transparent; border: none; width: 100%; text-align: left; padding-left: 12px;">
+        <i class="fas fa-sign-out-alt"></i> <span class="icon-only">Sair</span>
       </button>
     </form>
   </div>
 </div>
 
 <!-- Conteúdo Principal -->
-<div class="content">
-  <main class="py-4">
-    @yield('content')
-  </main>
+<div class="content" id="content">
+  @yield('content')
 </div>
 
-<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  $('#toggleSidebar').on('click', function () {
-    $('#sidebar').toggleClass('active');
-  });
+  $(function() {
+    // Toggle submenu ao clicar
+    $('.menu-item > a').on('click', function () {
+      const submenu = $(this).next('.submenu');
+      const isExpanded = $(this).attr('aria-expanded') === 'true';
 
-  $('.menu-item > a').on('click', function () {
-    const submenu = $(this).next('.submenu');
-    $('.submenu').not(submenu).slideUp();
-    submenu.slideToggle();
+      // Fecha todos os outros submenus e remove rotação dos ícones
+      $('.submenu').not(submenu).removeClass('show').attr('aria-hidden', 'true');
+      $('.menu-item > a').not(this).attr('aria-expanded', 'false').find('i.fas.fa-chevron-down').removeClass('rotated');
 
-    // Remove rotação dos outros ícones
-    $('.menu-item i.fas.fa-chevron-down').not($(this).find('i')).removeClass('rotated');
-    // Alterna rotação do ícone clicado
-    $(this).find('i.fas.fa-chevron-down').toggleClass('rotated');
+      // Alterna o submenu clicado
+      if (isExpanded) {
+        submenu.removeClass('show').attr('aria-hidden', 'true');
+        $(this).attr('aria-expanded', 'false');
+        $(this).find('i.fas.fa-chevron-down').removeClass('rotated');
+      } else {
+        submenu.addClass('show').attr('aria-hidden', 'false');
+        $(this).attr('aria-expanded', 'true');
+        $(this).find('i.fas.fa-chevron-down').addClass('rotated');
+      }
+    });
+
+    // Responsivo: botão toggle sidebar para mobile
+    $('#toggleSidebar').on('click', function () {
+      $('#sidebar').toggleClass('active');
+    });
   });
 </script>
+
 </body>
 </html>
