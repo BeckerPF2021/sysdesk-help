@@ -16,42 +16,51 @@ return new class extends Migration
         // Criando a tabela 'user_groups'
         Schema::create('user_groups', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();  // Nome do grupo de usuários
-            $table->text('description')->nullable(); // Descrição do grupo
-            $table->timestamps(); // created_at e updated_at
+            $table->string('name', 100)->unique();      // Nome do grupo de usuários
+            $table->text('description')->nullable();    // Descrição do grupo
+            $table->timestamps();                       // created_at e updated_at
         });
 
-        // Criando a tabela 'users' com a chave estrangeira user_group_id
+        // Criando a tabela 'users'
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');                  // Nome do usuário
-            $table->string('email')->unique();       // Email único do usuário
-            $table->timestamp('email_verified_at')->nullable(); // Data de verificação de email
-            $table->string('password');              // Senha do usuário
-            $table->rememberToken();                 // Token de "lembrar-me" (para autenticação)
-            $table->foreignId('user_group_id')       // Relacionamento com a tabela 'user_groups'
-                ->nullable()                        // Tornando a chave estrangeira opcional
-                ->constrained('user_groups')        // Referencia a tabela 'user_groups'
-                ->onDelete('set null');             // Se o grupo de usuário for excluído, o campo será setado como null
-            $table->timestamps();                   // created_at e updated_at
+            $table->string('name');                         // Nome do usuário
+            $table->string('email')->unique();              // Email único
+            $table->timestamp('email_verified_at')->nullable(); // Verificação de email
+            $table->string('password');                     // Senha
+            $table->rememberToken();                        // Token de "lembrar-me"
+            
+            // Novos campos baseados na view:
+            $table->string('phone')->nullable();            // Telefone
+            $table->string('role')->nullable();             // Cargo
+            $table->string('department')->nullable();       // Departamento
+            $table->string('profile_picture_url')->nullable(); // Foto de perfil
+            $table->boolean('active')->default(true);       // Status
+            $table->timestamp('last_login_at')->nullable(); // Último login
+
+            // Relação com grupos
+            $table->foreignId('user_group_id')->nullable()
+                ->constrained('user_groups')
+                ->onDelete('set null');
+
+            $table->timestamps(); // created_at e updated_at
         });
 
         // Criando a tabela 'password_reset_tokens'
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();      // Email associado ao token de reset
-            $table->string('token');                 // Token de reset de senha
-            $table->timestamp('created_at')->nullable(); // Data de criação do token
+            $table->string('email')->primary();          // Email associado ao token
+            $table->string('token');                     // Token de reset
+            $table->timestamp('created_at')->nullable(); // Data de criação
         });
 
         // Criando a tabela 'sessions'
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();          // ID da sessão (chave primária)
-            $table->foreignId('user_id')              // Relacionamento com a tabela 'users'
-                ->nullable()->index();               // Chave estrangeira para usuário, e index para melhorar performance
-            $table->string('ip_address', 45)->nullable(); // IP do usuário (formato IPv6)
-            $table->text('user_agent')->nullable();    // User agent do navegador
-            $table->longText('payload');               // Payload da sessão
-            $table->integer('last_activity')->index(); // Última atividade da sessão (index para performance)
+            $table->string('id')->primary();                 // ID da sessão
+            $table->foreignId('user_id')->nullable()->index(); // FK usuário
+            $table->string('ip_address', 45)->nullable();    // IP
+            $table->text('user_agent')->nullable();          // Navegador
+            $table->longText('payload');                     // Dados da sessão
+            $table->integer('last_activity')->index();       // Última atividade
         });
     }
 
@@ -62,7 +71,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Deletando as tabelas na ordem correta para evitar problemas com chaves estrangeiras
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');
