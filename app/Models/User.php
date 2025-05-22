@@ -13,19 +13,24 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'user_group_id', // Adicionado para permitir atribuição em massa
+        'user_group_id',
+        'phone',
+        'role',
+        'department',
+        'profile_picture_url',
+        'active',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * The attributes that should be hidden for arrays and JSON.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -33,23 +38,37 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * The attributes that should be cast to native types.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'active' => 'boolean',
+    ];
 
     /**
-     * Relacionamento com o grupo de usuários.
+     * Relacionamento com a tabela user_groups.
      */
     public function userGroup()
     {
         return $this->belongsTo(UserGroup::class);
+    }
+
+    /**
+     * Accessor para URL completa da imagem de perfil.
+     *
+     * @param string|null $value
+     * @return string
+     */
+    public function getProfilePictureUrlAttribute($value)
+    {
+        if ($value && \Storage::disk('public')->exists($value)) {
+            return asset('storage/' . $value);
+        }
+
+        $emailHash = md5(strtolower(trim($this->email)));
+        return "https://www.gravatar.com/avatar/$emailHash?d=mp&s=120";
     }
 }
