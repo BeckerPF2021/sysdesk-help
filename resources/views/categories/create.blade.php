@@ -1,55 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Categoria</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
+@section('title', 'Criar Categoria')
 
-<body>
+@section('content')
+<div class="container mt-4" style="max-width: 600px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <h1 class="mb-4 font-weight-bold" style="font-size: 2rem; letter-spacing: 0.02em;">
+        Criar Nova Categoria
+    </h1>
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm navbar navbar-expand-lg navbar-light border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
-                {{ config('app.name', 'Laravel') }}
+    {{-- Exibe erros de validação --}}
+    @if ($errors->any())
+        <div class="alert alert-danger" style="font-size: 1rem;">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('categories.store') }}" method="POST" style="font-size: 1.1rem;">
+        @csrf
+
+        <div class="form-group">
+            <label for="name" style="font-weight: 600;">Nome</label>
+            <input type="text" id="name" name="name" class="form-control form-control-lg" required autofocus
+                   style="font-size: 1.1rem;">
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary btn-lg font-weight-bold" style="font-size: 1.1rem;">
+                Criar Categoria
+            </button>
+            <a href="{{ route('categories.index') }}" class="btn btn-secondary btn-lg font-weight-bold" style="font-size: 1.1rem;">
+                Cancelar
             </a>
         </div>
-    </nav>
-
-    <!-- Conteúdo -->
-    <div class="container mt-4">
-        <h1 class="mb-4">Criar Nova Categoria</h1>
-
-        <!-- Exibe erros de validação -->
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ route('categories.store') }}" method="POST">
-            @csrf
-
-            <div class="form-group">
-                <label for="name">Nome</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Criar Categoria</button>
-            <a href="{{ route('categories.index') }}" class="btn btn-secondary">Cancelar</a>
-        </form>
-    </div>
-
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    </form>
+</div>
+@endsection

@@ -15,13 +15,13 @@ use App\Http\Controllers\ReportController; // <-- Adicionado para relatórios
 
 // Página inicial
 Route::get('/', function () {
-    return view('welcome');
+    return view(view: 'welcome');
 });
 
 // Dashboard - exige autenticação e verificação de email
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name(name: 'dashboard');
 
 // Rotas protegidas (usuário autenticado)
 Route::middleware('auth')->group(function () {

@@ -1,39 +1,121 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ __('Reset Password') }}</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background-image: url('/images/fundo.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+                Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        label {
+            font-weight: 600;
+            color: #374151;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+        input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+            outline: none;
+        }
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+        .input-error {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+        button[type="submit"] {
+            background-color: #6366f1;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+        }
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
+        button[type="submit"]:hover {
+            background-color: #4338ca;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <form method="POST" action="{{ route('password.store') }}">
+            @csrf
+
+            <!-- Token -->
+            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+            <!-- Email -->
+            <div>
+                <label for="email">{{ __('Email') }}</label>
+                <input id="email" type="email" name="email" value="{{ old('email', $request->email) }}" required autofocus />
+                @error('email')
+                    <div class="input-error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Password -->
+            <div style="margin-top: 1.25rem;">
+                <label for="password">{{ __('Password') }}</label>
+                <input id="password" type="password" name="password" required autocomplete="new-password" />
+                @error('password')
+                    <div class="input-error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Confirm Password -->
+            <div style="margin-top: 1.25rem;">
+                <label for="password_confirmation">{{ __('Confirm Password') }}</label>
+                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" />
+                @error('password_confirmation')
+                    <div class="input-error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <button type="submit">
                 {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>
