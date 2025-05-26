@@ -1,85 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registered Users</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.app')
 
-<!-- Navbar -->
-<nav class="bg-white shadow-sm navbar navbar-expand-lg navbar-light border-bottom">
-    <div class="container">
-        <a class="navbar-brand" href="{{ route('dashboard') }}">
-            {{ config('app.name', 'Laravel') }}
-        </a>
-        <div class="collapse navbar-collapse">
-            <ul class="ml-auto navbar-nav">
-                @auth
-                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('user-groups.index') }}">User Groups</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit') }}">Profile</a></li>
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-link nav-link">Logout</button>
-                        </form>
-                    </li>
-                @endauth
+@section('title', 'Usuários Registrados')
+
+@section('content')
+<div class="container my-5">
+    <h1 class="mb-4 text-center">Usuários Registrados</h1>
+
+    <!-- Mensagem de sucesso -->
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <!-- Erros de validação -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
             </ul>
         </div>
-    </div>
-</nav>
+    @endif
 
-<!-- Conteúdo -->
-<div class="container mt-4">
-    <h1 class="mb-4">Registered Users</h1>
+    @php
+        $groupId = Auth::user()->user_group_id;
+    @endphp
 
-    <table class="table table-bordered">
-        <thead class="thead-light">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>User Group</th>
-                <th>Registered At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    {{-- BLOCO 1 - ADMINISTRADOR --}}
+    @if ($groupId === 1)
+        <div class="mb-4 text-center">
+            <a href="{{ route('users.create') }}" class="px-4 btn btn-primary">Criar Novo Usuário</a>
+        </div>
+
+        <div class="row">
             @forelse ($users as $user)
-                <tr>
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->userGroup->name ?? '—' }}</td>
-                    <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
-                    <td class="d-flex">
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning mr-2">Edit</a>
-                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+                <div class="mb-4 col-md-6 col-lg-4">
+                    <div class="shadow-sm card h-100">
+                        <div class="text-white card-header bg-primary d-flex justify-content-between align-items-center">
+                            <strong>{{ $user->name }}</strong>
+                            <span>ID: {{ $user->id }}</span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Email:</strong> {{ $user->email }}</p>
+                            <p><strong>Grupo:</strong> {{ $user->userGroup->name ?? '—' }}</p>
+                            <p><strong>Registrado em:</strong> {{ $user->created_at->format('d/m/Y H:i') }}</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning">Editar</a>
+                            @if ($user->id !== Auth::id())
+                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             @empty
-                <tr>
-                    <td colspan="6" class="text-center">No users found.</td>
-                </tr>
+                <div class="col-12">
+                    <div class="text-center alert alert-info">Nenhum usuário encontrado.</div>
+                </div>
             @endforelse
-        </tbody>
-    </table>
-</div>
+        </div>
+    @endif
 
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>=
+    {{-- BLOCO 2 - AGENTE --}}
+    @if ($groupId === 2)
+        <div class="row">
+            @forelse ($users as $user)
+                @if ($user->user_group_id !== 1)
+                    <div class="mb-4 col-md-6 col-lg-4">
+                        <div class="shadow-sm card h-100">
+                            <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                                <strong>{{ $user->name }}</strong>
+                                <span>ID: {{ $user->id }}</span>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Email:</strong> {{ $user->email }}</p>
+                                <p><strong>Grupo:</strong> {{ $user->userGroup->name ?? '—' }}</p>
+                                <p><strong>Registrado em:</strong> {{ $user->created_at->format('d/m/Y H:i') }}</p>
+                            </div>
+                            <div class="text-center card-footer">
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-secondary">Ver/Editar</a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @empty
+                <div class="col-12">
+                    <div class="text-center alert alert-info">Nenhum usuário disponível.</div>
+                </div>
+            @endforelse
+        </div>
+    @endif
+
+    {{-- BLOCO 3 - USUÁRIO NORMAL --}}
+    @if ($groupId === 3)
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="shadow-sm card h-100">
+                    <div class="text-white card-header bg-success d-flex justify-content-between align-items-center">
+                        <strong>{{ Auth::user()->name }}</strong>
+                        <span>ID: {{ Auth::user()->id }}</span>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
+                        <p><strong>Grupo:</strong> {{ Auth::user()->userGroup->name ?? '—' }}</p>
+                        <p><strong>Registrado em:</strong> {{ Auth::user()->created_at->format('d/m/Y H:i') }}</p>
+                    </div>
+                    <div class="text-center card-footer">
+                        <a href="{{ route('users.edit', Auth::id()) }}" class="btn btn-sm btn-secondary">Editar Perfil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Paginação -->
+    @if ($groupId === 1 || $groupId === 2)
+        <div class="mt-4 d-flex justify-content-center">
+            {{ $users->links() }}
+        </div>
+    @endif
+</div>
+@endsection

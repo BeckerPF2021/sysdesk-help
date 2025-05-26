@@ -1,106 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Groups</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.app')
 
-    <!-- Navbar padrão Laravel -->
-    <nav class="bg-white shadow-sm navbar navbar-expand-lg navbar-light border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
+@section('title', 'Grupos de Usuários')
 
-            <div class="collapse navbar-collapse">
-                <ul class="ml-auto navbar-nav">
-                    @auth
-                        <li class="nav-item">
-                            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('user-groups.index') }}" class="nav-link">User Groups</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('user-groups.create') }}" class="nav-link">Create Group</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                {{ Auth::user()->name }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button class="dropdown-item" type="submit">Logout</button>
-                                </form>
-                            </div>
-                        </li>
-                    @endauth
+@section('content')
+@php
+    $groupId = Auth::user()->user_group_id;
+@endphp
 
-                    @guest
-                        <li class="nav-item">
-                            <a href="{{ route('login') }}" class="nav-link">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('register') }}" class="nav-link">Register</a>
-                        </li>
-                    @endguest
-                </ul>
-            </div>
+<div class="mt-4 container-fluid">
+    <h1 class="mb-4 text-center">Grupos de Usuários</h1>
+
+    {{-- Mensagens de feedback --}}
+    @if (session('success'))
+        <div class="text-center alert alert-success">
+            {{ session('success') }}
         </div>
-    </nav>
+    @endif
 
-    <!-- Conteúdo principal -->
-    <div class="container mt-4">
-        <h1 class="mb-4">List of User Groups</h1>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+    {{-- Ação: Adicionar novo grupo (somente admin) --}}
+    @if ($groupId === 1)
+        <div class="mb-4 text-center">
+            <a href="{{ route('user-groups.create') }}" class="btn btn-primary">Adicionar Novo Grupo</a>
+        </div>
+    @endif
 
-        <table class="table mt-3 table-bordered">
-            <thead class="thead-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th width="180">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($userGroups as $group)
-                    <tr>
-                        <td>{{ $group->id }}</td>
-                        <td>{{ $group->name }}</td>
-                        <td>{{ $group->description }}</td>
-                        <td>
-                            <a href="{{ route('user-groups.edit', $group->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('user-groups.destroy', $group->id) }}" method="POST" style="display:inline;">
+    {{-- Grupos exibidos por tipo de usuário --}}
+    <div class="row">
+        @forelse ($userGroups as $group)
+            <div class="mb-4 col-md-6 col-lg-4">
+                <div class="shadow-sm card h-100">
+
+                    {{-- Cabeçalho personalizado por grupo --}}
+                    <div class="card-header d-flex justify-content-between align-items-center
+                        @if ($groupId === 1)
+                            bg-success text-white
+                        @elseif ($groupId === 2)
+                            bg-warning text-dark
+                        @else
+                            bg-secondary text-white justify-content-center
+                        @endif">
+                        <h5 class="mb-0">{{ $group->name }}</h5>
+                        @if ($groupId !== 3)
+                            <small>ID: {{ $group->id }}</small>
+                        @endif
+                    </div>
+
+                    {{-- Corpo do card --}}
+                    @if ($groupId !== 3)
+                        <div class="card-body">
+                            <p><strong>Descrição:</strong> {{ $group->description ?? '—' }}</p>
+                        </div>
+                    @endif
+
+                    {{-- Rodapé com ações (apenas para admin) --}}
+                    @if ($groupId === 1)
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{{ route('user-groups.edit', $group->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="{{ route('user-groups.destroy', $group->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este grupo?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Are you sure?')">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                             </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr><td colspan="4" class="text-center">No user groups found.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+        @empty
+            <div class="col-12">
+                <div class="text-center alert alert-info">
+                    @if ($groupId === 1)
+                        Nenhum grupo de usuário encontrado.
+                    @elseif ($groupId === 2)
+                        Nenhum grupo de usuário disponível.
+                    @else
+                        Nenhum grupo visível para seu perfil.
+                    @endif
+                </div>
+            </div>
+        @endforelse
     </div>
 
-    <!-- Scripts do Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    {{-- Paginação --}}
+    @if ($userGroups->hasPages())
+        <div class="mt-4 d-flex justify-content-center">
+            {{ $userGroups->links() }}
+        </div>
+    @endif
+</div>
+@endsection

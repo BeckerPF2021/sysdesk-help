@@ -1,65 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User Group</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
-<body>
+@extends('layouts.app')
 
-    <!-- Navbar -->
-    <nav class="mb-4 navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">UserGroup CRUD</a>
-        <div class="collapse navbar-collapse">
-            <ul class="ml-auto navbar-nav">
-                <li class="nav-item">
-                    <a href="{{ route('user-groups.index') }}" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('user-groups.create') }}" class="nav-link">Create Group</a>
-                </li>
-            </ul>
+@section('content')
+<div class="container-fluid px-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Editar Grupo de Usuário</h5>
+                </div>
+
+                <div class="card-body">
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <strong>Erros encontrados:</strong>
+                            <ul class="mb-0 mt-2">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('user-groups.update', $userGroup->id) }}">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="form-group">
+                            <label for="name">Nome do Grupo</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                class="form-control"
+                                value="{{ old('name', $userGroup->name) }}"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="description">Descrição <small class="text-muted">(opcional)</small></label>
+                            <textarea
+                                id="description"
+                                name="description"
+                                class="form-control"
+                                rows="3"
+                            >{{ old('description', $userGroup->description) }}</textarea>
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-between">
+                            <a href="{{ route('user-groups.index') }}" class="btn btn-secondary">
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                Atualizar
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
         </div>
-    </nav>
-
-    <!-- Conteúdo -->
-    <div class="container">
-        <h1>Edit User Group</h1>
-
-        {{-- Exibe erros de validação --}}
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        {{-- Formulário --}}
-        <form action="{{ route('user-groups.update', $userGroup->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="form-group">
-                <label for="name">Group Name</label>
-                <input type="text" name="name" class="form-control" value="{{ old('name', $userGroup->name) }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="description">Description (optional)</label>
-                <textarea name="description" class="form-control" rows="3">{{ old('description', $userGroup->description) }}</textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('user-groups.index') }}" class="btn btn-secondary">Cancel</a>
-        </form>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
+@endsection

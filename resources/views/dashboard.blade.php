@@ -1,77 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            margin-bottom: 30px;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.app')
 
-    <!-- Navbar padrão Laravel -->
-    <nav class="bg-white shadow-sm navbar navbar-expand-lg navbar-light border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
+@section('title', 'Dashboard')
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="ml-auto navbar-nav">
-                    @auth
-                        <li class="nav-item">
-                            <a href="{{ route('dashboard') }}" class="nav-link active">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('user-groups.index') }}" class="nav-link">User Groups</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link">Users</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                {{ Auth::user()->name }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="{{ route('profile.edit') }}" class="dropdown-item">Profile</a>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Logout</button>
-                                </form>
-                            </div>
-                        </li>
-                    @endauth
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Conteúdo do Dashboard -->
-    <div class="container">
-        <div class="jumbotron text-center">
-            <h1 class="display-4">Welcome, {{ Auth::user()->name }}!</h1>
-            <p class="lead">This is your dashboard.</p>
-            <hr class="my-4">
-            <p>Manage your user groups or update your profile below.</p>
-            <a class="btn btn-primary btn-lg" href="{{ route('user-groups.index') }}" role="button">Manage User Groups</a>
-            <a class="btn btn-outline-secondary btn-lg" href="{{ route('users.index') }}" role="button">View Users</a>
-            <a class="btn btn-outline-info btn-lg" href="{{ route('profile.edit') }}" role="button">Edit Profile</a>
-        </div>
+@section('content')
+<div class="container mt-4">
+    <div class="mb-4 text-center">
+        <h1 class="display-4">Olá, {{ Auth::user()->name }}!</h1>
+        <p class="lead">Bem-vindo ao SYSDESK.</p>
+        <hr class="my-4">
+        <p>Seu usuário: <strong>{{ Auth::user()->username ?? Auth::user()->email }}</strong></p>
     </div>
 
-    <!-- Scripts do Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    @php
+        $group = Auth::user()->user_group_id;
+    @endphp
+
+    @switch($group)
+        @case(1) {{-- Administrador --}}
+            <h3 class="mb-3 text-center">Você tem acesso completo ao sistema. Algumas ações que você pode realizar:</h3>
+            <div class="row justify-content-center">
+                @foreach ([
+                    ['route' => 'users.index', 'label' => 'Gerenciar Usuários', 'color' => 'primary', 'icon' => 'fas fa-users'],
+                    ['route' => 'user-groups.index', 'label' => 'Gerenciar Grupos', 'color' => 'primary', 'icon' => 'fas fa-users-cog'],
+                    ['route' => 'departments.index', 'label' => 'Gerenciar Departamentos', 'color' => 'primary', 'icon' => 'fas fa-building'],
+                    ['route' => 'categories.index', 'label' => 'Gerenciar Categorias', 'color' => 'primary', 'icon' => 'fas fa-tags'],
+                    ['route' => 'ticket-statuses.index', 'label' => 'Gerenciar Status de Ticket', 'color' => 'primary', 'icon' => 'fas fa-clipboard-list'],
+                    ['route' => 'ticket-priorities.index', 'label' => 'Gerenciar Prioridades', 'color' => 'primary', 'icon' => 'fas fa-exclamation-circle'],
+                    ['route' => 'reports.index', 'label' => 'Acompanhar Relatórios', 'color' => 'primary', 'icon' => 'fas fa-chart-line'],
+                    ['route' => 'profile.index', 'label' => 'Ver Perfil', 'color' => 'secondary', 'icon' => 'fas fa-user']
+                ] as $card)
+                    <div class="mb-3 col-md-4">
+                        <a href="{{ route($card['route']) }}" class="text-decoration-none">
+                            <div class="card border-{{ $card['color'] }} shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <i class="{{ $card['icon'] }} fa-2x text-{{ $card['color'] }} mr-3"></i>
+                                    <span class="font-weight-bold text-{{ $card['color'] }}">{{ $card['label'] }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            @break
+
+        @case(2) {{-- Agente --}}
+            <h3 class="mb-3 text-center">Suas principais funções neste sistema são:</h3>
+            <div class="row justify-content-center">
+                @foreach ([
+                    ['route' => 'tickets.index', 'label' => 'Gerenciar Tickets', 'color' => 'warning', 'icon' => 'fas fa-ticket-alt'],
+                    ['route' => 'reports.index', 'label' => 'Acompanhar Relatórios', 'color' => 'warning', 'icon' => 'fas fa-chart-bar'],
+                    ['route' => 'profile.index', 'label' => 'Ver Perfil', 'color' => 'secondary', 'icon' => 'fas fa-user']
+                ] as $card)
+                    <div class="mb-3 col-md-4">
+                        <a href="{{ route($card['route']) }}" class="text-decoration-none">
+                            <div class="card border-{{ $card['color'] }} shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <i class="{{ $card['icon'] }} fa-2x text-{{ $card['color'] }} mr-3"></i>
+                                    <span class="font-weight-bold text-{{ $card['color'] }}">{{ $card['label'] }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            @break
+
+        @case(3) {{-- Usuário Normal --}}
+            <h3 class="mb-3 text-center">Algumas ações úteis para você:</h3>
+            <div class="row justify-content-center">
+                @foreach ([
+                    ['route' => 'tickets.index', 'label' => 'Meus Tickets', 'color' => 'success', 'icon' => 'fas fa-ticket-alt'],
+                    ['route' => 'tickets.create', 'label' => 'Abrir Novo Ticket', 'color' => 'success', 'icon' => 'fas fa-plus-circle'],
+                    ['route' => 'profile.index', 'label' => 'Ver Perfil', 'color' => 'secondary', 'icon' => 'fas fa-user']
+                ] as $card)
+                    <div class="mb-3 col-md-4">
+                        <a href="{{ route($card['route']) }}" class="text-decoration-none">
+                            <div class="card border-{{ $card['color'] }} shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <i class="{{ $card['icon'] }} fa-2x text-{{ $card['color'] }} mr-3"></i>
+                                    <span class="font-weight-bold text-{{ $card['color'] }}">{{ $card['label'] }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            @break
+
+        @default
+            <h4 class="mb-3 text-center text-danger">Perfil desconhecido</h4>
+            <p class="text-center">Por favor, entre em contato com o administrador do sistema para resolver este problema.</p>
+    @endswitch
+
+    <div class="mt-4 row justify-content-center">
+        <div class="text-center col-md-8">
+            <p class="text-muted">Se precisar de ajuda, consulte o manual do sistema ou fale com o suporte.</p>
+        </div>
+    </div>
+</div>
+@endsection

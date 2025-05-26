@@ -8,26 +8,49 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * Cria a tabela 'tickets' com relacionamentos.
      */
     public function up(): void
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 255);
-            $table->text('description');
-            $table->timestamps();
+            $table->string('title', 255);               // Título do chamado
+            $table->text('description');                // Descrição detalhada
+            $table->timestamps();                       // Campos created_at e updated_at
 
-            // Foreign Keys
-            $table->foreignId('fk_user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('fk_category_id')->constrained('categories')->onDelete('restrict');
-            $table->foreignId('fk_ticket_priority_id')->constrained('ticket_priorities')->onDelete('restrict');
-            $table->foreignId('fk_ticket_status_id')->constrained('ticket_statuses')->onDelete('restrict');
-            $table->foreignId('fk_department_id')->constrained('departments')->onDelete('cascade');
+            // Relacionamentos (chaves estrangeiras)
+            $table->foreignId('fk_user_id')             // Usuário que abriu o chamado
+                  ->constrained('users')
+                  ->onDelete('cascade');
+
+            $table->foreignId('fk_responsible_user_id') // Usuário responsável pelo chamado
+                  ->nullable()
+                  ->constrained('users')
+                  ->onDelete('set null');
+
+            $table->foreignId('fk_category_id')         // Categoria do chamado
+                  ->constrained('categories')
+                  ->onDelete('restrict');
+
+            $table->foreignId('fk_ticket_priority_id')  // Prioridade
+                  ->constrained('ticket_priorities')
+                  ->onDelete('restrict');
+
+            $table->foreignId('fk_ticket_status_id')    // Status atual
+                  ->constrained('ticket_statuses')
+                  ->onDelete('restrict');
+
+            $table->foreignId('fk_department_id')       // Departamento responsável
+                  ->constrained('departments')
+                  ->onDelete('cascade');
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * Remove a tabela 'tickets'.
      */
     public function down(): void
     {
