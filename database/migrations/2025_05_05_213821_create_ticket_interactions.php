@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -20,7 +21,8 @@ return new class extends Migration
             $table->unsignedBigInteger('interaction_type');  // Tipo de interação (referência a outra tabela)
             $table->string('file_type', 100)->nullable();      // Tipo de arquivo (se houver)
             $table->bigInteger('file_size')->nullable();      // Tamanho do arquivo (se houver)
-            
+            $table->string('file_path')->nullable();          // Caminho do arquivo salvo
+
             // Chaves estrangeiras
             $table->foreignId('fk_user_id')                 // Usuário que fez a interação
                   ->constrained('users')

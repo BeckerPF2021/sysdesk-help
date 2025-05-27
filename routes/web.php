@@ -11,7 +11,8 @@ use App\Http\Controllers\TicketStatusController;
 use App\Http\Controllers\TicketPriorityController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketInteractionController;
-use App\Http\Controllers\ReportController; // <-- Adicionado para relatórios
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\InteractionTypeController; // ✅ Importação adicionada
 
 // Página inicial
 Route::get('/', function () {
@@ -50,12 +51,17 @@ Route::middleware('auth')->group(function () {
         Route::get('interactions/{ticketInteraction}/edit', [TicketInteractionController::class, 'edit'])->name('edit');
         Route::put('interactions/{ticketInteraction}', [TicketInteractionController::class, 'update'])->name('update');
         Route::delete('interactions/{ticketInteraction}', [TicketInteractionController::class, 'destroy'])->name('destroy');
+
+        // Rota para download/visualização do arquivo anexado na interação
+        Route::get('interactions/{ticketInteraction}/download', [TicketInteractionController::class, 'downloadFile'])
+            ->name('download');
     });
 
-    // Relatórios (ex: relatório de chamados)
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    // Tipos de interação
+    Route::resource('interaction-types', InteractionTypeController::class);
 
-    // Nova rota para gerar PDF do relatório
+    // Relatórios
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/pdf', [ReportController::class, 'pdf'])->name('reports.pdf');
 });
 
