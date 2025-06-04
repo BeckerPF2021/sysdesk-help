@@ -1,55 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Categoria</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
+@section('title', 'Criar Categoria')
 
-<body>
+@section('content')
+<div class="container mt-4" style="max-width: 600px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <h1 class="mb-4 font-weight-bold" style="font-size: 2rem; letter-spacing: 0.02em;">
+        Criar Nova Categoria
+    </h1>
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm navbar navbar-expand-lg navbar-light border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
+    {{-- Exibe erros de validação --}}
+    @if ($errors->any())
+        <div class="alert alert-danger shadow-sm" style="font-size: 1rem;">
+            <ul class="mb-0 pl-3">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-    </nav>
+    @endif
 
-    <!-- Conteúdo -->
-    <div class="container mt-4">
-        <h1 class="mb-4">Criar Nova Categoria</h1>
-
-        <!-- Exibe erros de validação -->
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ route('categories.store') }}" method="POST">
+    <div class="card shadow-sm p-4 bg-white rounded">
+        <form action="{{ route('categories.store') }}" method="POST" style="font-size: 1.1rem;">
             @csrf
 
-            <div class="form-group">
-                <label for="name">Nome</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+            <div class="form-group mb-4">
+                <label for="name" class="font-weight-bold">Nome</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    class="form-control form-control-lg" 
+                    required 
+                    autofocus
+                    style="font-size: 1.1rem;"
+                    value="{{ old('name') }}"
+                >
             </div>
 
-            <button type="submit" class="btn btn-primary">Criar Categoria</button>
-            <a href="{{ route('categories.index') }}" class="btn btn-secondary">Cancelar</a>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-primary btn-lg font-weight-bold mr-2 shadow-sm">
+                    Criar Categoria
+                </button>
+                <a href="{{ route('categories.index') }}" class="btn btn-secondary btn-lg font-weight-bold shadow-sm">
+                    Cancelar
+                </a>
+            </div>
         </form>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+</div>
+@endsection

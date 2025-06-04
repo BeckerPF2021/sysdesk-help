@@ -15,18 +15,34 @@ use App\Mail\TicketUpdatedMail;
 
 class TicketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = Ticket::with([
+        $search = $request->input('search');        // filtro por título
+        $statusId = $request->input('status_id');  // filtro por status (id)
+
+        $query = Ticket::with([
             'user',
             'responsibleUser',
             'category',
             'ticketPriority',
             'ticketStatus',
             'department'
-        ])->get();
+        ]);
 
-        return view('tickets.index', compact('tickets'));
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        if ($statusId) {
+            $query->where('fk_ticket_status_id', $statusId);
+        }
+
+        $tickets = $query->paginate(15)->withQueryString();
+
+        // Para popular dropdown de filtro de status na view
+        $ticketStatuses = TicketStatus::all();
+
+        return view('tickets.index', compact('tickets', 'ticketStatuses', 'search', 'statusId'));
     }
 
     public function create()
@@ -55,7 +71,6 @@ class TicketController extends Controller
 
         $ticket = Ticket::create($validated);
 
-        // Enviar e-mail para o responsável (caso definido)
         if ($ticket->fk_responsible_user_id) {
             $responsibleUser = User::find($ticket->fk_responsible_user_id);
             if ($responsibleUser && $responsibleUser->email) {
@@ -100,7 +115,6 @@ class TicketController extends Controller
 
         $ticket->update($validated);
 
-        // Envia e-mail se o responsável foi alterado
         if ($oldResponsible != $ticket->fk_responsible_user_id && $ticket->fk_responsible_user_id) {
             $newResponsible = User::find($ticket->fk_responsible_user_id);
             if ($newResponsible && $newResponsible->email) {
@@ -108,7 +122,6 @@ class TicketController extends Controller
             }
         }
 
-        // Envia e-mail se status ou prioridade foram alterados
         if ($oldStatus != $ticket->fk_ticket_status_id || $oldPriority != $ticket->fk_ticket_priority_id) {
             $emailsToNotify = [];
 

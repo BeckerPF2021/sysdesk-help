@@ -1,53 +1,63 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tipos de Interação</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-</head>
+@section('title', 'Tipos de Interação')
 
-<body>
-
-    <div class="container mt-4">
-        <h1 class="mb-4">Tipos de Interação</h1>
-
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <a href="{{ route('interaction-types.create') }}" class="mb-3 btn btn-primary">Adicionar Novo Tipo de Interação</a>
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($interactionTypes as $interactionType)
-                    <tr>
-                        <td>{{ $interactionType->id }}</td>
-                        <td>{{ $interactionType->name }}</td>
-                        <td>
-                            <a href="{{ route('interaction-types.edit', $interactionType->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                            <form action="{{ route('interaction-types.destroy', $interactionType->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+@section('content')
+<div class="container mt-5">
+    <div class="flex-wrap mb-4 d-flex justify-content-between align-items-center">
+        <h1 class="mb-3 text-primary fw-bold">
+            <i class="fas fa-comments me-2"></i> Tipos de Interação
+        </h1>
+        <a href="{{ route('interaction-types.create') }}" class="mb-3 shadow-sm btn btn-primary fw-semibold">
+            <i class="fas fa-plus me-1"></i> Novo Tipo
+        </a>
     </div>
 
-</body>
+    {{-- Mensagem de sucesso --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <div>{{ session('success') }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+        </div>
+    @endif
 
-</html>
+    @if($interactionTypes->count())
+        <div class="table-responsive shadow rounded">
+            <table class="table table-hover table-striped text-nowrap mb-0 align-middle" style="font-size: 0.93rem;">
+                <thead class="text-center table-light">
+                    <tr>
+                        <th style="width: 10%;">ID</th>
+                        <th>Nome</th>
+                        <th style="width: 20%;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($interactionTypes as $type)
+                        <tr>
+                            <td class="text-center">{{ $type->id }}</td>
+                            <td>{{ $type->name }}</td>
+                            <td class="text-center">
+                                <a href="{{ route('interaction-types.edit', $type) }}" class="btn btn-sm btn-warning me-1" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('interaction-types.destroy', $type) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirma exclusão?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger" title="Excluir">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <div class="text-center alert alert-info mt-4">
+            Nenhum tipo de interação cadastrado.
+        </div>
+    @endif
+</div>
+@endsection
