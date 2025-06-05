@@ -15,25 +15,32 @@ class TicketInteraction extends Model
         'interaction_type',
         'file_type',
         'file_size',
-        'user_id',
-        'ticket_id',  // Certifique-se de que o campo esteja correto, pode ser 'fk_ticket_id' dependendo do banco
+        'file_path',         // Adicionado campo file_path
+        'fk_user_id',
+        'fk_ticket_id',
     ];
 
-    // Relacionamento com o usuário
+    /**
+     * Relacionamento com o usuário que fez a interação
+     */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id'); // A chave estrangeira é 'user_id'
+        return $this->belongsTo(User::class, 'fk_user_id');
     }
 
-    // Relacionamento com o ticket
+    /**
+     * Relacionamento com o ticket relacionado
+     */
     public function ticket()
     {
-        return $this->belongsTo(Ticket::class, 'fk_ticket_id'); // Usando 'fk_ticket_id' como chave estrangeira
+        return $this->belongsTo(Ticket::class, 'fk_ticket_id');
     }
 
-    // Relacionamento com o tipo de interação
+    /**
+     * Relacionamento com o tipo de interação
+     */
     public function interactionType()
     {
-        return $this->belongsTo(InteractionType::class, 'interaction_type'); // Relacionamento com o tipo de interação
+        return $this->belongsTo(InteractionType::class, 'interaction_type');
     }
 }

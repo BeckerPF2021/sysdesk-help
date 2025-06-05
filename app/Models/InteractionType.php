@@ -9,9 +9,11 @@ class InteractionType extends Model
 {
     use HasFactory;
 
-    // Defina a tabela, caso o nome seja diferente da convenção
-    protected $table = 'interaction_types';
-
-    // Defina os campos preenchíveis
     protected $fillable = ['name'];
+
+    // Se quiser relacionamento com interações, pode criar depois (exemplo):
+    // public function interactions()
+    // {
+    //     return $this->hasMany(TicketInteraction::class, 'fk_interaction_type_id');
+    // }
 }
