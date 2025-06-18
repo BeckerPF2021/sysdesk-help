@@ -21,25 +21,105 @@
 
 # Sysdesk Help
 
-**Sysdesk Help** é um sistema de **helpdesk** desenvolvido com o framework **Laravel**, projetado para facilitar o gerenciamento de chamados técnicos de forma simples e eficiente.
+**Sysdesk Help** é um sistema de **chamados técnicos (Helpdesk)** desenvolvido com o framework **Laravel**. O objetivo é permitir o gerenciamento completo de tickets, departamentos, interações e relatórios, com foco em produtividade e organização da equipe de suporte.
 
-## Funcionalidades Implementadas
+---
 
-- ✅ Template base responsivo com Bootstrap
-- ✅ Autenticação de login
-- ✅ Grupo de usuários (controle de acesso)
-- ✅ Criação e gerenciamento de **Departamentos**
-- ✅ Criação e gerenciamento de **Categorias** de tickets
-- ✅ Definição de **Status** de tickets
-- ✅ Criação e gerenciamento de **Prioridades** de tickets
-- ✅ Sistema de **Tickets**, com criação, atribuição e acompanhamento
+## ✅ Funcionalidades
 
-## Captura de Tela
+- Autenticação de usuários com verificação de e-mail
+- Edição de perfil do usuário
+- Controle de permissões via **Grupos de Usuários**
+- Gerenciamento de **Departamentos** e **Categorias**
+- Definição de **Status** e **Prioridades** para tickets
+- CRUD completo de **Tickets** (Chamados)
+- **Interações de Tickets** com histórico e **anexos múltiplos**
+- Cadastro de **Tipos de Interação**
+- 🧠 **Notificações por e-mail** ou in-app sobre atualizações de tickets/interações
+- **Relatórios em PDF** para controle de chamados
+- Interface responsiva com **Bootstrap 5**
+
+---
+
+## 📂 Menus do Sistema
+
+- Dashboard
+- Meu Perfil
+- Usuários
+- Grupos de Usuários
+- Departamentos
+- Categorias
+- Status dos Tickets
+- Prioridades dos Tickets
+- Tickets
+- Interações dos Tickets
+- Tipos de Interação
+- Relatórios
+
+---
+
+## 🔮 Possíveis Melhorias Futuras
+
+- 🔐 Controle de permissões avançado por função e política (RBAC completo)
+- 📦 Gestão de Serviços por Categoria para controle de escopo e SLA
+- 📊 Relatórios analíticos interativos com gráficos de desempenho
+- ⏳ Sistema de SLA com alertas e controle de tempo de resposta e resolução
+- 📅 Agenda de atendimento com calendário de chamados
+- 🔁 Atribuição automática de tickets com base em carga ou regras
+- 💬 Chat interno ou chatbot para abertura e acompanhamento de chamados
+- 🧾 Histórico de ações completo (log de auditoria)
+- 🌐 Suporte a múltiplos idiomas (i18n / l10n)
+
+## 📸 Captura de Tela
 
 <p align="center">
     <img src="public/images/Demo/demo_sysdesk_help.png" alt="Exemplo do sistema Sysdesk Help" width="800">
 </p>
 
-## Sobre o Laravel
+---
 
-Laravel é um framework para aplicações web com uma sintaxe elegante e expressiva. Ele proporciona uma base sólida para o desenvolvimento moderno com recursos como roteamento, ORM Eloquent, autenticação, entre outros.
+## 🔧 Sobre o Laravel
+
+Laravel é um dos frameworks PHP mais poderosos e populares. Ele oferece:
+
+- Roteamento limpo e expressivo
+- ORM Eloquent para banco de dados
+- Sistema robusto de autenticação
+- Blade: engine de templates leve e poderosa
+- Artisan: comandos CLI para automação
+- Suporte a testes automatizados
+
+---
+
+## 🚀 Requisitos
+
+- PHP >= 8.1
+- Composer
+- MySQL ou PostgreSQL
+- Node.js + NPM
+- Extensões PHP: `pdo`, `mbstring`, `openssl`, `tokenizer`, etc.
+
+---
+
+## ▶️ Como Rodar o Projeto Localmente
+
+```bash
+# Clonar o projeto
+git clone https://github.com/seu-usuario/sysdesk-help.git
+cd sysdesk-help
+
+# Instalar dependências PHP
+composer install
+
+# Criar e configurar o .env
+cp .env.example .env
+php artisan key:generate
+
+# Rodar migrações
+php artisan migrate
+
+# Instalar dependências do frontend
+npm install && npm run dev
+
+# Iniciar servidor
+php artisan serve
