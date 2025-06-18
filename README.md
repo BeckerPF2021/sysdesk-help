@@ -27,34 +27,34 @@
 
 ## ✅ Funcionalidades
 
-- Autenticação de usuários com verificação de e-mail
-- Edição de perfil do usuário
-- Controle de permissões via **Grupos de Usuários**
-- Gerenciamento de **Departamentos** e **Categorias**
-- Definição de **Status** e **Prioridades** para tickets
-- CRUD completo de **Tickets** (Chamados)
-- **Interações de Tickets** com histórico e **anexos múltiplos**
-- Cadastro de **Tipos de Interação**
+- 🔐 Autenticação de usuários com verificação de e-mail
+- 👤 Edição de perfil do usuário
+- 👥 Controle de permissões via **Grupos de Usuários**
+- 🏢 Gerenciamento de **Departamentos** e **Categorias**
+- 🚦 Definição de **Status** e **Prioridades** para tickets
+- 🎫 CRUD completo de **Tickets** (Chamados)
+- 💬 **Interações de Tickets** com histórico e **anexos múltiplos**
+- 📝 Cadastro de **Tipos de Interação**
 - 🧠 **Notificações por e-mail** ou in-app sobre atualizações de tickets/interações
-- **Relatórios em PDF** para controle de chamados
-- Interface responsiva com **Bootstrap 5**
+- 📄 **Relatórios em PDF** para controle de chamados
+- 📱 Interface responsiva com **Bootstrap 5**
 
 ---
 
 ## 📂 Menus do Sistema
 
-- Dashboard
-- Meu Perfil
-- Usuários
-- Grupos de Usuários
-- Departamentos
-- Categorias
-- Status dos Tickets
-- Prioridades dos Tickets
-- Tickets
-- Interações dos Tickets
-- Tipos de Interação
-- Relatórios
+- 🏠 **Dashboard**
+- 👤 **Meu Perfil**
+- 👨‍💻 **Usuários**
+- 🛡️ **Grupos de Usuários**
+- 🏢 **Departamentos**
+- 🗂️ **Categorias**
+- 🚦 **Status dos Tickets**
+- ⚡ **Prioridades dos Tickets**
+- 🎫 **Tickets**
+- 💬 **Interações dos Tickets**
+- 📝 **Tipos de Interação**
+- 📊 **Relatórios**
 
 ---
 
@@ -82,22 +82,22 @@
 
 Laravel é um dos frameworks PHP mais poderosos e populares. Ele oferece:
 
-- Roteamento limpo e expressivo
-- ORM Eloquent para banco de dados
-- Sistema robusto de autenticação
-- Blade: engine de templates leve e poderosa
-- Artisan: comandos CLI para automação
-- Suporte a testes automatizados
+- 🗺️ Roteamento limpo e expressivo
+- 🗃️ ORM Eloquent para banco de dados
+- 🔑 Sistema robusto de autenticação
+- 🖌️ Blade: engine de templates leve e poderosa
+- ⚙️ Artisan: comandos CLI para automação
+- 🧪 Suporte a testes automatizados
 
 ---
 
 ## 🚀 Requisitos
 
-- PHP >= 8.1
-- Composer
-- MySQL ou PostgreSQL
-- Node.js + NPM
-- Extensões PHP: `pdo`, `mbstring`, `openssl`, `tokenizer`, etc.
+- ✅ PHP >= 8.1
+- ✅ Composer
+- ✅ MySQL
+- ✅ Node.js + NPM
+- ✅ Extensões PHP: `pdo`, `mbstring`, `openssl`, `tokenizer`, etc.
 
 ---
 
