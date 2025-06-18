@@ -447,7 +447,7 @@
                             </div>
                             
                             <!-- Título Principal -->
-                            <h1 class="hero-title">Bem-vindo ao Sysdesk Help</h1>
+                            <h1 class="hero-title">Bem-vindo ao Sysdesk</h1>
                             
                             <!-- Subtítulo -->
                             <p class="hero-subtitle">

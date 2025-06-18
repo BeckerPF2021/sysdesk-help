@@ -72,6 +72,8 @@ class ReportController extends Controller
 
         $data = $this->getReportData($startDate, $endDate);
 
+        // Debug removido - dados prontos para uso
+
         return view('reports.index', $data);
     }
 

@@ -3,21 +3,21 @@
 @section('title', 'Departamentos')
 
 @section('content')
-<div class="container-fluid py-4">
+<div class="py-4 container-fluid">
     <!-- Header Section -->
-    <div class="row mb-4">
+    <div class="mb-4 row">
         <div class="col-12">
-            <div class="card bg-gradient-primary border-0 shadow-lg">
-                <div class="card-body text-white py-4">
+            <div class="border-0 shadow-lg card bg-gradient-primary">
+                <div class="py-4 text-white card-body">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            <h1 class="display-6 fw-bold mb-2">
+                            <h1 class="mb-2 display-6 fw-bold">
                                 <i class="fas fa-building me-3"></i>Departamentos
                             </h1>
-                            <p class="lead mb-0 opacity-75">Gerenciamento de departamentos organizacionais</p>
+                            <p class="mb-0 opacity-75 lead">Gerenciamento de departamentos organizacionais</p>
                         </div>
                         <div class="col-md-4 text-end">
-                            <a href="{{ route('departments.create') }}" class="btn btn-light btn-lg shadow-sm">
+                            <a href="{{ route('departments.create') }}" class="shadow-sm btn btn-light btn-lg">
                                 <i class="fas fa-plus me-2"></i>Novo Departamento
                             </a>
                         </div>
@@ -29,15 +29,15 @@
 
     <!-- Alert Messages -->
     @if ($errors->any())
-        <div class="row mb-4">
+        <div class="mb-4 row">
             <div class="col-12">
-                <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+                <div class="border-0 shadow-sm alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="d-flex align-items-start">
-                        <div class="bg-danger bg-opacity-25 rounded-circle p-2 me-3">
+                        <div class="p-2 bg-opacity-25 bg-danger rounded-circle me-3">
                             <i class="fas fa-exclamation-triangle text-danger"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <h6 class="alert-heading mb-2">Atenção!</h6>
+                            <h6 class="mb-2 alert-heading">Atenção!</h6>
                             <p class="mb-2"><strong>Por favor, corrija os seguintes erros:</strong></p>
                             <ul class="mb-0 ps-3">
                                 @foreach ($errors->all() as $error)
@@ -56,19 +56,19 @@
     @if ($departments->count())
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
+                <div class="border-0 shadow-sm card">
                     <!-- Card Header -->
-                    <div class="card-header bg-white border-bottom-0 py-4">
+                    <div class="py-4 bg-white card-header border-bottom-0">
                         <div class="row align-items-center">
                             <div class="col-md-6">
-                                <h4 class="card-title mb-0 text-dark fw-bold">
+                                <h4 class="mb-0 card-title text-dark fw-bold">
                                     <i class="fas fa-list text-primary me-2"></i>
                                     Lista de Departamentos
                                 </h4>
                             </div>
                             <div class="col-md-6 text-end">
                                 <div class="d-flex align-items-center justify-content-end">
-                                    <div class="rounded-pill px-3 py-2">
+                                    <div class="px-3 py-2 rounded-pill">
                                         <i class="fas fa-building me-2"></i>
                                         <span class="fw-semibold">{{ $departments->count() }}</span>
                                         <small class="text-muted ms-1">departamento(s)</small>
@@ -79,9 +79,9 @@
                     </div>
 
                     <!-- Card Body -->
-                    <div class="card-body p-0">
+                    <div class="p-0 card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0 align-middle">
+                            <table class="table mb-0 align-middle table-hover">
                                 <thead class="table-light">
                                     <tr>
                                         <th class="py-3 fw-semibold" style="width: 100px;">
@@ -90,7 +90,7 @@
                                         <th class="py-3 fw-semibold">
                                             <i class="fas fa-tag text-muted me-1"></i>Nome do Departamento
                                         </th>
-                                        <th class="text-center py-3 fw-semibold" style="width: 140px;">
+                                        <th class="py-3 text-center fw-semibold" style="width: 140px;">
                                             <i class="fas fa-cogs text-muted me-1"></i>Ações
                                         </th>
                                     </tr>
@@ -99,7 +99,7 @@
                                     @foreach ($departments as $department)
                                         <tr class="border-bottom">
                                             <td class="py-3">
-                                                <span class="badge bg-light text-dark fw-bold px-2 py-1">
+                                                <span class="px-2 py-1 badge bg-light text-dark fw-bold">
                                                     #{{ str_pad($department->id, 3, '0', STR_PAD_LEFT) }}
                                                 </span>
                                             </td>
@@ -110,16 +110,16 @@
                                                 </div>
                                             </div>
                                             </td>
-                                            <td class="text-center py-3">
+                                            <td class="py-3 text-center">
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{ route('departments.edit', $department->id) }}" 
-                                                       class="btn btn-sm btn-outline-warning" 
+                                                    <a href="{{ route('departments.edit', $department->id) }}"
+                                                       class="btn btn-sm btn-outline-warning"
                                                        title="Editar departamento"
                                                        data-bs-toggle="tooltip">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <button type="button" 
-                                                            class="btn btn-sm btn-outline-danger" 
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-outline-danger"
                                                             title="Excluir departamento"
                                                             data-bs-toggle="tooltip"
                                                             onclick="confirmDelete({{ $department->id }}, '{{ $department->name }}')">
@@ -139,10 +139,10 @@
 
         {{-- Paginação --}}
         @if (method_exists($departments, 'links') && $departments->hasPages())
-            <div class="row mt-4">
+            <div class="mt-4 row">
                 <div class="col-12 d-flex justify-content-center">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body py-3">
+                    <div class="border-0 shadow-sm card">
+                        <div class="py-3 card-body">
                             {{ $departments->links() }}
                         </div>
                     </div>
@@ -153,11 +153,11 @@
         {{-- Estado vazio --}}
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center py-5">
-                        <i class="fas fa-building-slash fa-4x text-muted mb-4 opacity-50"></i>
-                        <h4 class="text-muted mb-3">Nenhum Departamento Encontrado</h4>
-                        <p class="text-muted mb-4">Não há departamentos cadastrados no sistema.</p>
+                <div class="border-0 shadow-sm card">
+                    <div class="py-5 text-center card-body">
+                        <i class="mb-4 opacity-50 fas fa-building-slash fa-4x text-muted"></i>
+                        <h4 class="mb-3 text-muted">Nenhum Departamento Encontrado</h4>
+                        <p class="mb-4 text-muted">Não há departamentos cadastrados no sistema.</p>
                         <a href="{{ route('departments.create') }}" class="btn btn-primary btn-lg">
                             <i class="fas fa-plus me-2"></i>Criar Primeiro Departamento
                         </a>
@@ -169,23 +169,23 @@
 
     <!-- Informações Adicionais -->
     @if ($departments->count())
-        <div class="row mt-4">
+        <div class="mt-4 row">
             <div class="col-12">
-                <div class="card bg-light border-0">
-                    <div class="card-body py-4">
+                <div class="border-0 card bg-light">
+                    <div class="py-4 card-body">
                         <div class="row align-items-center">
-                            <div class="col-md-2 text-center">
+                            <div class="text-center col-md-2">
                                 <i class="fas fa-info-circle fa-3x text-primary"></i>
                             </div>
                             <div class="col-md-8">
                                 <h6 class="mb-2">Sobre os Departamentos</h6>
-                                <p class="text-muted small mb-0">
-                                    Os departamentos ajudam a organizar a estrutura da sua empresa no sistema SYSDESK. 
+                                <p class="mb-0 text-muted small">
+                                    Os departamentos ajudam a organizar a estrutura da sua empresa no sistema SYSDESK.
                                     Eles facilitam a categorização de usuários, tickets e processos, tornando o gerenciamento mais eficiente e organizado.
                                 </p>
                             </div>
-                            <div class="col-md-2 text-center">
-                                <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-block">
+                            <div class="text-center col-md-2">
+                                <div class="p-3 bg-primary bg-opacity-10 rounded-circle d-inline-block">
                                     <i class="fas fa-building fa-2x text-primary"></i>
                                 </div>
                             </div>
@@ -195,24 +195,24 @@
             </div>
         </div>
     @endif
-    
+
 </div>
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-danger text-white border-0">
+        <div class="border-0 shadow modal-content">
+            <div class="text-white border-0 modal-header bg-danger">
                 <h5 class="modal-title" id="deleteModalLabel">
                     <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Exclusão
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body py-4">
+            <div class="py-4 modal-body">
                 <div class="text-center">
-                    <i class="fas fa-building-slash fa-3x text-danger mb-3"></i>
+                    <i class="mb-3 fas fa-building-slash fa-3x text-danger"></i>
                     <h6>Tem certeza que deseja excluir este departamento?</h6>
-                    <p class="text-muted mb-0">
+                    <p class="mb-0 text-muted">
                         Departamento: <strong id="departmentName"></strong><br>
                         <small class="text-warning">
                             <i class="fas fa-exclamation-triangle me-1"></i>
@@ -221,7 +221,7 @@
                     </p>
                 </div>
             </div>
-            <div class="modal-footer border-0">
+            <div class="border-0 modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times me-1"></i>Cancelar
                 </button>
@@ -294,26 +294,26 @@
         padding-left: 1rem;
         padding-right: 1rem;
     }
-    
+
     .card-body .row {
         flex-direction: column;
         gap: 1rem;
     }
-    
+
     .btn-group {
         flex-direction: column;
         width: 100%;
     }
-    
+
     .btn-group .btn {
         margin: 1px 0;
         border-radius: 4px !important;
     }
-    
+
     .display-6 {
         font-size: 1.5rem;
     }
-    
+
     .btn-lg {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
@@ -332,6 +332,12 @@
 </style>
 
 <script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+<script>
+
 // Função para confirmar exclusão
 function confirmDelete(departmentId, departmentName) {
     document.getElementById('departmentName').textContent = departmentName;

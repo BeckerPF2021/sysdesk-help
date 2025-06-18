@@ -87,7 +87,7 @@
       background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-bg-light) 100%);
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 12px;
       box-sizing: border-box;
       z-index: 1010;
       white-space: nowrap;
@@ -142,7 +142,7 @@
     .user-info {
       display: flex;
       align-items: center;
-      padding: 20px;
+      padding: 12px;
       border-bottom: 1px solid var(--border-light);
       cursor: default;
       margin-bottom: 10px;
@@ -159,20 +159,36 @@
       box-shadow: var(--shadow);
     }
 
-    .user-name {
+    /* CORREÇÃO: Container para nome e cargo com alinhamento melhorado */
+    .user-details {
       margin-left: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+      min-height: 45px; /* Mesma altura da foto */
+      transition: all 0.3s ease;
+    }
+
+    .user-name {
       font-size: 0.95rem;
       font-weight: 600;
       white-space: nowrap;
       color: var(--text-light);
       user-select: text;
-      transition: all 0.3s ease;
+      line-height: 1.2;
+      margin: 0;
+      padding: 0;
     }
 
     .user-role {
       font-size: 0.75rem;
       color: var(--text-muted);
       font-weight: 400;
+      line-height: 1.2;
+      margin: 2px 0 0 0;
+      padding: 0;
+      opacity: 0.8;
     }
 
     .sidebar a,
@@ -331,13 +347,17 @@
       padding: 30px;
       transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       overflow-y: auto;
-      padding-top: 100px;
+      padding-top: 15px;
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
       min-height: 100vh;
     }
 
     .sidebar.expanded ~ .content {
       margin-left: 280px;
+    }
+
+    .sidebar:not(.expanded) .sidebar-content span.icon-only  {
+      display: none;
     }
 
     .logout-btn {
@@ -419,21 +439,21 @@
         width: 280px !important;
         transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
       }
-      
+
       .sidebar.expanded {
         left: 0 !important;
       }
-      
+
       .content {
         margin-left: 0 !important;
         padding: 20px;
         padding-top: 90px;
       }
-      
+
       .sidebar.expanded ~ .content {
         margin-left: 0 !important;
       }
-      
+
       /* Overlay para mobile */
       .sidebar.expanded::before {
         content: '';
@@ -522,7 +542,7 @@
           src="{{ Auth::user()->profile_picture_url ?? $gravatarUrl }}"
           alt="Foto do usuário"
         />
-        <div>
+        <div class="user-details">
           <div class="user-name">{{ Auth::user()->name }}</div>
           <div class="user-role">{{ Auth::user()->role ?? 'Usuário' }}</div>
         </div>
@@ -656,7 +676,7 @@
   // Toggle sidebar
   toggleBtn.addEventListener('click', () => {
     sidebar.classList.toggle('expanded');
-    
+
     // Armazenar preferência do usuário
     localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
   });
@@ -681,7 +701,7 @@
           sm.classList.remove('show');
         }
       });
-      
+
       document.querySelectorAll('.menu-item > a[aria-expanded]').forEach(link => {
         if (link !== menuToggle) {
           link.setAttribute('aria-expanded', 'false');
@@ -694,7 +714,7 @@
         submenu.classList.add('show');
         menuToggle.setAttribute('aria-expanded', 'true');
         chevron.classList.add('rotated');
-        
+
         // Expandir sidebar se necessário
         if (!sidebar.classList.contains('expanded')) {
           sidebar.classList.add('expanded');
@@ -718,8 +738,8 @@
 
   // Fechar sidebar no mobile ao clicar fora
   document.addEventListener('click', (e) => {
-    if (window.innerWidth <= 768 && 
-        sidebar.classList.contains('expanded') && 
+    if (window.innerWidth <= 768 &&
+        sidebar.classList.contains('expanded') &&
         !sidebar.contains(e.target)) {
       sidebar.classList.remove('expanded');
     }
@@ -730,7 +750,7 @@
     link.addEventListener('mouseenter', function() {
       this.style.transform = 'translateX(5px)';
     });
-    
+
     link.addEventListener('mouseleave', function() {
       this.style.transform = 'translateX(0)';
     });

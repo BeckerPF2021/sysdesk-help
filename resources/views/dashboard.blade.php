@@ -63,7 +63,7 @@
     <!-- Role Badge -->
     <div class="row mb-4">
         <div class="col-12 text-center">
-            <span class="badge bg-{{ $groupColors[$group] ?? 'secondary' }} px-4 py-2 fs-5 role-badge">
+                <span class="badge bg-{{ $groupColors[$group] ?? 'secondary' }} px-4 py-2 fs-5 role-badge">
                 <i class="{{ $groupIcons[$group] ?? 'fas fa-question-circle' }} me-2"></i>
                 {{ $groupNames[$group] ?? 'Perfil Desconhecido' }}
             </span>

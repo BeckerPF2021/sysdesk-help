@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -36,13 +37,41 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $data = $request->validated();
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Atualiza os campos básicos
+        $user->fill([
+            'name' => $data['name'] ?? $user->name,
+            'email' => $data['email'] ?? $user->email,
+            'phone' => $data['phone'] ?? $user->phone,
+            'department' => $data['department'] ?? $user->department,
+            'role' => $data['role'] ?? $user->role,
+            'active' => $request->has('active') ? (bool) $request->active : $user->active,
+        ]);
+
+        // Atualiza senha se informada
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
         }
 
-        $request->user()->save();
+        // Atualiza foto de perfil se enviada
+        if ($request->hasFile('profile_picture_url')) {
+            // Exclui imagem antiga se existir
+            if ($user->profile_picture_url && Storage::disk('public')->exists($user->profile_picture_url)) {
+                Storage::disk('public')->delete($user->profile_picture_url);
+            }
+
+            $path = $request->file('profile_picture_url')->store('profile_pictures', 'public');
+            $user->profile_picture_url = $path;
+        }
+
+        // Resetar verificação de email se o email foi alterado
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -57,6 +86,11 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        // Exclui imagem de perfil se existir
+        if ($user->profile_picture_url && Storage::disk('public')->exists($user->profile_picture_url)) {
+            Storage::disk('public')->delete($user->profile_picture_url);
+        }
 
         Auth::logout();
 

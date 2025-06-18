@@ -5,26 +5,25 @@
 @section('content')
 @php
     $groupId = Auth::user()->user_group_id;
-    $groupColors = [1 => 'primary', 2 => 'warning', 3 => 'success'];
-    $groupIcons = [1 => 'crown', 2 => 'headset', 3 => 'user'];
+    $groupIcons = [1 => 'shield-alt', 2 => 'user-circle', 3 => 'headset'];
 @endphp
 
-<div class="container-fluid py-4">
+<div class="py-4 container-fluid">
     <!-- Header Section -->
-    <div class="row mb-4">
+    <div class="mb-4 row">
         <div class="col-12">
-            <div class="card bg-gradient-info border-0 shadow-lg">
-                <div class="card-body text-white py-4">
+            <div class="border-0 shadow-lg card bg-gradient-info">
+                <div class="py-4 text-white card-body">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            <h1 class="display-6 fw-bold mb-2">
+                            <h1 class="mb-2 display-6 fw-bold">
                                 <i class="fas fa-users-cog me-3"></i>Grupos de Usuários
                             </h1>
-                            <p class="lead mb-0 opacity-75">Gerenciamento de grupos e permissões do sistema</p>
+                            <p class="mb-0 opacity-75 lead">Gerenciamento de grupos e permissões do sistema</p>
                         </div>
                         <div class="col-md-4 text-end">
                             @if ($groupId === 1)
-                                <a href="{{ route('user-groups.create') }}" class="btn btn-light btn-lg shadow-sm">
+                                <a href="{{ route('user-groups.create') }}" class="shadow-sm btn btn-light btn-lg">
                                     <i class="fas fa-plus me-2"></i>Novo Grupo
                                 </a>
                             @endif
@@ -37,15 +36,15 @@
 
     <!-- Alert Messages -->
     @if (session('success'))
-        <div class="row mb-4">
+        <div class="mb-4 row">
             <div class="col-12">
-                <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+                <div class="border-0 shadow-sm alert alert-success alert-dismissible fade show" role="alert">
                     <div class="d-flex align-items-center">
-                        <div class="bg-success bg-opacity-25 rounded-circle p-2 me-3">
+                        <div class="p-2 bg-opacity-25 bg-success rounded-circle me-3">
                             <i class="fas fa-check-circle text-success"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <h6 class="alert-heading mb-1">Sucesso!</h6>
+                            <h6 class="mb-1 alert-heading">Sucesso!</h6>
                             <p class="mb-0">{{ session('success') }}</p>
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
@@ -56,15 +55,15 @@
     @endif
 
     @if ($errors->any())
-        <div class="row mb-4">
+        <div class="mb-4 row">
             <div class="col-12">
-                <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+                <div class="border-0 shadow-sm alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="d-flex align-items-start">
-                        <div class="bg-danger bg-opacity-25 rounded-circle p-2 me-3">
+                        <div class="p-2 bg-opacity-25 bg-danger rounded-circle me-3">
                             <i class="fas fa-exclamation-triangle text-danger"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <h6 class="alert-heading mb-2">Atenção!</h6>
+                            <h6 class="mb-2 alert-heading">Atenção!</h6>
                             <p class="mb-2"><strong>Por favor, corrija os seguintes erros:</strong></p>
                             <ul class="mb-0 ps-3">
                                 @foreach ($errors->all() as $error)
@@ -83,12 +82,12 @@
     @if ($userGroups->count())
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
+                <div class="border-0 shadow-sm card">
                     <!-- Card Header -->
-                    <div class="card-header bg-white border-bottom-0 py-4">
+                    <div class="py-4 bg-white card-header border-bottom-0">
                         <div class="row align-items-center">
                             <div class="col-md-6">
-                                <h4 class="card-title mb-0 text-dark fw-bold">
+                                <h4 class="mb-0 card-title text-dark fw-bold">
                                     <i class="fas fa-list text-info me-2"></i>
                                     Lista de Grupos
                                 </h4>
@@ -106,14 +105,14 @@
                     </div>
 
                     <!-- Card Body -->
-                    <div class="card-body p-0">
+                    <div class="p-0 card-body">
                         @if ($groupId === 3)
                             {{-- Layout em cards para usuários normais --}}
-                            <div class="row g-4 p-4">
+                            <div class="p-4 row g-4">
                                 @foreach ($userGroups as $group)
                                     <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm h-100">
-                                            <div class="card-body text-center p-4">
+                                        <div class="border-0 shadow-sm card h-100">
+                                            <div class="p-4 text-center card-body">
                                                 @php
                                                     $color = $groupColors[$group->id] ?? 'secondary';
                                                     $icon = $groupIcons[$group->id] ?? 'users';
@@ -136,7 +135,7 @@
                         @else
                             {{-- Layout em tabela para admin e agentes --}}
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0 align-middle">
+                                <table class="table mb-0 align-middle table-hover">
                                     <thead class="table-light">
                                         <tr>
                                             <th class="py-3 fw-semibold">
@@ -145,11 +144,11 @@
                                             <th class="py-3 fw-semibold">
                                                 <i class="fas fa-info-circle text-muted me-1"></i>Descrição
                                             </th>
-                                            <th class="text-center py-3 fw-semibold">
+                                            <th class="py-3 text-center fw-semibold">
                                                 <i class="fas fa-hashtag text-muted me-1"></i>ID
                                             </th>
                                             @if ($groupId === 1)
-                                                <th class="text-center py-3 fw-semibold">
+                                                <th class="py-3 text-center fw-semibold">
                                                     <i class="fas fa-cogs text-muted me-1"></i>Ações
                                                 </th>
                                             @endif
@@ -175,19 +174,19 @@
                                                         <span class="text-muted fst-italic">Sem descrição</span>
                                                     @endif
                                                 </td>
-                                                <td class="text-center py-3">
+                                                <td class="py-3 text-center">
                                                     <span class="badge bg-light text-dark fw-bold">#{{ $group->id }}</span>
                                                 </td>
                                                 @if ($groupId === 1)
-                                                    <td class="text-center py-3">
+                                                    <td class="py-3 text-center">
                                                         <div class="btn-group" role="group">
-                                                            <a href="{{ route('user-groups.edit', $group->id) }}" 
-                                                               class="btn btn-sm btn-outline-warning" 
+                                                            <a href="{{ route('user-groups.edit', $group->id) }}"
+                                                               class="btn btn-sm btn-outline-warning"
                                                                title="Editar grupo">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
-                                                            <button type="button" 
-                                                                    class="btn btn-sm btn-outline-danger" 
+                                                            <button type="button"
+                                                                    class="btn btn-sm btn-outline-danger"
                                                                     title="Excluir grupo"
                                                                     onclick="confirmDelete({{ $group->id }}, '{{ $group->name }}')">
                                                                 <i class="fas fa-trash-alt"></i>
@@ -208,10 +207,10 @@
 
         {{-- Paginação --}}
         @if ($userGroups->hasPages())
-            <div class="row mt-4">
+            <div class="mt-4 row">
                 <div class="col-12 d-flex justify-content-center">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body py-3">
+                    <div class="border-0 shadow-sm card">
+                        <div class="py-3 card-body">
                             {{ $userGroups->links() }}
                         </div>
                     </div>
@@ -222,19 +221,19 @@
         {{-- Estado vazio --}}
         <div class="row">
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center py-5">
-                        <i class="fas fa-users-slash fa-4x text-muted mb-4 opacity-50"></i>
-                        <h4 class="text-muted mb-3">Nenhum Grupo Encontrado</h4>
+                <div class="border-0 shadow-sm card">
+                    <div class="py-5 text-center card-body">
+                        <i class="mb-4 opacity-50 fas fa-users-slash fa-4x text-muted"></i>
+                        <h4 class="mb-3 text-muted">Nenhum Grupo Encontrado</h4>
                         @if ($groupId === 1)
-                            <p class="text-muted mb-4">Não há grupos de usuários cadastrados no sistema.</p>
+                            <p class="mb-4 text-muted">Não há grupos de usuários cadastrados no sistema.</p>
                             <a href="{{ route('user-groups.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus me-2"></i>Criar Primeiro Grupo
                             </a>
                         @elseif ($groupId === 2)
-                            <p class="text-muted mb-0">Nenhum grupo disponível para visualização.</p>
+                            <p class="mb-0 text-muted">Nenhum grupo disponível para visualização.</p>
                         @else
-                            <p class="text-muted mb-0">Nenhum grupo visível para seu perfil.</p>
+                            <p class="mb-0 text-muted">Nenhum grupo visível para seu perfil.</p>
                         @endif
                     </div>
                 </div>
@@ -244,22 +243,22 @@
 
     <!-- Informações Adicionais -->
     @if ($userGroups->count() && $groupId !== 3)
-        <div class="row mt-4">
+        <div class="mt-4 row">
             <div class="col-12">
-                <div class="card bg-light border-0">
-                    <div class="card-body py-4">
+                <div class="border-0 card bg-light">
+                    <div class="py-4 card-body">
                         <div class="row align-items-center">
-                            <div class="col-md-2 text-center">
+                            <div class="text-center col-md-2">
                                 <i class="fas fa-info-circle fa-3x text-info"></i>
                             </div>
                             <div class="col-md-8">
                                 <h6 class="mb-2">Sobre os Grupos de Usuários</h6>
-                                <p class="text-muted small mb-0">
-                                    Os grupos definem as permissões e funcionalidades que cada usuário pode acessar no sistema SYSDESK. 
+                                <p class="mb-0 text-muted small">
+                                    Os grupos definem as permissões e funcionalidades que cada usuário pode acessar no sistema SYSDESK.
                                     Administradores podem gerenciar todos os aspectos, Agentes focam no atendimento, e Usuários criam e acompanham tickets.
                                 </p>
                             </div>
-                            <div class="col-md-2 text-center">
+                            <div class="text-center col-md-2">
                                 <div class="row g-2">
                                     @foreach ([1 => 'primary', 2 => 'warning', 3 => 'success'] as $id => $color)
                                         <div class="col-4">
@@ -281,18 +280,18 @@
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-danger text-white border-0">
+        <div class="border-0 shadow modal-content">
+            <div class="text-white border-0 modal-header bg-danger">
                 <h5 class="modal-title" id="deleteModalLabel">
                     <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Exclusão
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body py-4">
+            <div class="py-4 modal-body">
                 <div class="text-center">
-                    <i class="fas fa-users-slash fa-3x text-danger mb-3"></i>
+                    <i class="mb-3 fas fa-users-slash fa-3x text-danger"></i>
                     <h6>Tem certeza que deseja excluir este grupo?</h6>
-                    <p class="text-muted mb-0">
+                    <p class="mb-0 text-muted">
                         Grupo: <strong id="groupName"></strong><br>
                         <small class="text-warning">
                             <i class="fas fa-exclamation-triangle me-1"></i>
@@ -301,7 +300,7 @@
                     </p>
                 </div>
             </div>
-            <div class="modal-footer border-0">
+            <div class="border-0 modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times me-1"></i>Cancelar
                 </button>
@@ -346,10 +345,16 @@
 </style>
 
 <script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+<script>
 function confirmDelete(groupId, groupName) {
     document.getElementById('groupName').textContent = groupName;
     document.getElementById('deleteForm').action = `/user-groups/${groupId}`;
     new bootstrap.Modal(document.getElementById('deleteModal')).show();
 }
 </script>
+
 @endsection
